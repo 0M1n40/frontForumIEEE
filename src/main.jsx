@@ -1,0 +1,43 @@
+import { createRoot } from 'react-dom/client'
+import './index.css'
+
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import NotFound from './pages/NotFound'
+import Unauthorized from './pages/Unauthorized'
+import UserList from './components/UserList'
+
+import { AuthProvider } from './contexts/AuthContext'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import ProtectedRoute from './components/ProtectedRoute'
+
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <AuthProvider>
+      <Routes>
+        <Route 
+          path="/" 
+          element={ 
+            <ProtectedRoute requiredRole="user">
+              <Home />
+            </ProtectedRoute>
+          } />
+        <Route path="/login" element={ <Login />} />
+        <Route path="/register" element={ <Register />} />
+        <Route path="/forgot-password" element={ <ForgotPassword />} />
+        <Route 
+          path="/users" 
+          element={ 
+            <ProtectedRoute requiredRole="admin">
+              <UserList />
+            </ProtectedRoute>
+          } />
+        <Route path="/unauthorized" element={ <Unauthorized />} />
+        <Route path="*" element={ <NotFound />} />
+      </Routes>
+    </AuthProvider >
+  </BrowserRouter>
+)
