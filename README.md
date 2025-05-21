@@ -1,15 +1,25 @@
 Bem-vindo ao repositório do **Projeto do Ramo Estudantil IEEE do Cefet - RJ / Maracanã**!
 
+## Sumário
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Como Rodar o Projeto](#como-rodar-o-projeto)
+- [Contribuindo](#contribuindo)
+    - [Boas-Práticas de Branch](#boas-práticas-de-branch)
+    - [Regras para Branches e Pull Requests](#regras-para-branches-e-pull-requests)
+- [Licença](#licença)
+
 ## Sobre o Projeto
 
-Este projeto tem como objetivo promover atividades acadêmicas, técnicas e sociais relacionadas à engenharia, tecnologia e inovação, integrando estudantes do Cefet/RJ ao universo IEEE.
+Este projeto tem como objetivo implementar o case (Fórum de Dúvidas) proposto como Projeto de Extensão de Curso do Ramo Estudantil IEEE.
 
 ## Funcionalidades
 
-- Portal para divulgação de eventos e notícias
-- Área para membros e colaboradores
-- Integração com redes sociais
-- Recursos para organização de workshops e palestras
+- Portal para cadastro de dúvidas e respostas
+- Área para membros e admins
+- Recursos para curtidas de dúvidas e respostas
+- Personalização da conta do usuário
 
 ## Tecnologias Utilizadas
 
@@ -35,7 +45,15 @@ Este projeto tem como objetivo promover atividades acadêmicas, técnicas e soci
 
 ## Contribuindo
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+### Boas-Práticas de Branch
+
+| Category        |Meaning                                                                     |
+| --------------- | --------------------------------------------------------------------------- |
+| `wip`           | for a work in progress                                                      |
+| `feature`       | for adding, removing or modifying a feature                                 |
+| `experimental`  | for experimenting something which is not an issue                           |
+| `hotfix`        | for quickly fixing critical issues, usually with a temporary solution Cell  |
+| `bugfix`        | for fixing a bug                                                            |
 
 ### Regras para Branches e Pull Requests
 
