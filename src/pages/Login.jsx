@@ -1,8 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import ProtectedRoute from "../components/ProtectedRoute";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../components/header/Header";
+import Footer from "../components/footer/Footer";
 
 const Login = () => {
 

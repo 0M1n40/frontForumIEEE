@@ -1,5 +1,8 @@
 import { useAuth } from "../contexts/AuthContext";
 
+import Header from "../components/header/Header";
+import Footer from "../components/footer/Footer";
+
 const defaultHome = () => {
     return (
         <div className="home">
