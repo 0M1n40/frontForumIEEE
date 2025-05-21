@@ -31,23 +31,23 @@ export const AuthProvider = ({ children }) => {
 
         try{
 
-            const response = await axios.post(`${API_URL}/`, { username, password })
+            const response = await axios.post(`${API_URL}/auth/login`, { username, password })
             const { token, user } = response.data;
             console.log(response.data)
-            // localStorage.setItem('token', token);
-            // setUser(user);
+            localStorage.setItem('token', token);
+            setUser(user);
 
-            // if(role === 'admin') {
-            //     setUser({ username, role });
-            //     navigate('/admin');
-            // }else if(role === 'user') {
-            //     setUser({ username, role });
-            //     navigate('/');
-            // }else{
-            //     toast.error('Invalid credentials');
-            //     setUser(null);
-            //     navigate('/login');
-            // }
+            if(role === 'admin') {
+                setUser({ username, role });
+                navigate('/admin');
+            }else if(role === 'user') {
+                setUser({ username, role });
+                navigate('/');
+            }else{
+                toast.error('Invalid credentials');
+                setUser(null);
+                navigate('/login');
+            }
 
         }catch (error) {
             toast.error('Invalid credentials');
