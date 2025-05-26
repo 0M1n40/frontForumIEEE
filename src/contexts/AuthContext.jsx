@@ -50,12 +50,13 @@ export const AuthProvider = ({ children }) => {
     };
 
     // Função para cadastrar usuário novo
-    const register = async({ nome, username, password }) => {
+    const register = async({ nome, username, password, role }) => {
         try {
             const response = await axios.post(`${API_URL}/auth/register`, {
                 nome,
                 username,
-                password
+                password,
+               role
             });
 
             toast.success('Cadastro realizado com sucesso! Faça login para continuar.');

@@ -126,7 +126,7 @@ function Login() {
 
           {/* Link para login ] */}
           <Link to="/cadastrar" className="text-md hover:text-amber-700 cursor-pointer">
-          Já tem uma conta? Faça login
+          Não tem uma conta? Cadastre-se
               </Link>
 
         </form>
