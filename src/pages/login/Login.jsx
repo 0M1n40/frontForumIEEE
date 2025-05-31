@@ -20,7 +20,7 @@ function Login() {
 
   // Se o usuário já estiver logado, redireciona para a home
   useEffect(() => {
-    if (user) {
+    if (!user) { // depois tirar o !
       navigate("/home");
     }
   }, [user, navigate]);
