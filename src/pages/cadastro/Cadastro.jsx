@@ -1,30 +1,38 @@
+// src/pages/cadastro/Cadastro.jsx
 import { useNavigate, Link } from "react-router-dom";
-import "./Cadastro.css"; 
+import "./Cadastro.css";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext"; 
-import LogoAgora from "../../utils/img/LogoAgora.png"; 
-import BotaoEntrar from "../../components/buttons/botaoEntrar/BotaoEntrar"; 
-import { Oval } from 'react-loader-spinner'; 
+import { useAuth } from "../../contexts/AuthContext";
+import LogoAgora from "../../utils/img/LogoAgora.png";
+import BotaoEntrar from "../../components/buttons/botaoEntrar/BotaoEntrar";
+import { Oval } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 
 function Cadastro() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const { user, register } = useAuth(); // Troca login por register
+  // Renomeia isLoading para authIsLoading para evitar conflito com o isLoading local, se houver.
+  // Pega a função handleRegister do AuthContext.
+  const { user, handleRegister, isLoading: authIsLoading } = useAuth();
 
+  // Estado local para o formulário
   const [form, setForm] = useState({
-    id: null,
-    nome: "",         // novo campo
-    username: "",     // email
-    password: "",
-    role: "user",
+    nome: "",     
+    username: "",  
+    password: "",  
+   
   });
 
+  // Estado local para o loading específico desta página/operação
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Efeito para redirecionar se o usuário já estiver logado
   useEffect(() => {
     if (user) {
       navigate("/home");
     }
   }, [user, navigate]);
 
+  // Função para atualizar o estado do formulário
   function atualizarEstado(e) {
     setForm({
       ...form,
@@ -32,20 +40,37 @@ function Cadastro() {
     });
   }
 
+  // Função para lidar com o envio do formulário de cadastro
   async function realizarCadastro(e) {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault(); // Previne o comportamento padrão de submissão do formulário
+    setIsSubmitting(true); // Ativa o loading local
+
+    // Validação simples (pode ser mais robusta)
+    if (form.password.length < 6) { // Exemplo: senha com no mínimo 6 caracteres
+      // toast.error("A senha deve ter pelo menos 6 caracteres.");
+      toast.error("A senha deve ter pelo menos 6 caracteres."); // Use toast para melhor UX
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      await register(form); // Usa register do AuthContext
+      // Chama a função handleRegister do AuthContext com os dados do formulário
+      // A função handleRegister já lida com a navegação e toasts globais
+      await handleRegister(form);
+      // Se chegou aqui sem erro, o AuthContext já redirecionou para /login
+    } catch (error) {
+      // O AuthContext já mostra um toast de erro genérico.
+      // Você pode adicionar tratamentos específicos aqui se necessário.
+      console.error("Falha ao realizar cadastro (componente):", error);
+      toast.error("Não foi possível concluir o cadastro. Verifique os dados.");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false); // Desativa o loading local
     }
   }
 
-
-  // Exibe o loading animado enquanto o login está sendo processado
-  if (isLoading) {
+  // Exibe o loading animado se o AuthContext estiver carregando (verificação inicial de token)
+  // ou se o formulário estiver sendo submetido.
+  if (authIsLoading || isSubmitting) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Oval
@@ -68,7 +93,7 @@ function Cadastro() {
         <div className="absolute w-[300px] flex justify-center mb-100">
           <img
             src={LogoAgora}
-            alt="Logo do projeto VaiComigo"
+            alt="Logo do projeto" // Atualize o alt text
             className="max-w-[55%] md:max-w-[60%] h-auto lg:max-w-[50%] mb-[40%] mt-[-10%]"
           />
         </div>
@@ -96,9 +121,9 @@ function Cadastro() {
           {/* Campo E-mail */}
           <div className="flex flex-col w-full mb-4">
             <input
-              type="email"
+              type="email" // Tipo 'email' para validação do navegador
               id="username"
-              name="username"
+              name="username" // Mantém 'username' se o estado do form usa, mas lembre-se que é o email
               placeholder="E-mail"
               className="border-b border-gray-300 bg-transparent p-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-500"
               value={form.username}
@@ -113,24 +138,22 @@ function Cadastro() {
               type="password"
               id="password"
               name="password"
-              placeholder="Senha"
+              placeholder="Senha (mínimo 6 caracteres)"
               className="border-b border-gray-300 bg-transparent p-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-500"
               value={form.password}
               onChange={atualizarEstado}
               required
+              minLength={6} // Adiciona validação HTML básica
             />
           </div>
 
           {/* Botão de cadastro */}
-          <BotaoEntrar label={"Cadastrar"} />
+          {/* Desabilitar o botão durante a submissão para evitar cliques múltiplos */}
+          <BotaoEntrar label={"Cadastrar"} type="submit" disabled={isSubmitting || authIsLoading} />
 
           <Link to="/login" className="text-md hover:text-amber-700 cursor-pointer">
-          Já tem uma conta? Faça login
-              </Link>
-
-
-            
-    
+            Já tem uma conta? Faça login
+          </Link>
         </form>
       </div>
     </div>
