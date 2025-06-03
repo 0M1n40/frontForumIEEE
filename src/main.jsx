@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 import Unauthorized from './pages/Unauthorized'
+import NovaDuvida from "./pages/duvida/nova-duvida"
 
 import { AuthProvider } from './contexts/AuthContext'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={ <Login />} />
         <Route path="/cadastrar" element={ <Cadastro />} />
         <Route path="/forgot-password" element={ <ForgotPassword />} />
+        <Route path="/nova-duvida" element={ <NovaDuvida />} />
         <Route 
           path="/users" 
           element={ 
