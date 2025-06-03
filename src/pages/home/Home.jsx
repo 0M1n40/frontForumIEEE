@@ -8,20 +8,29 @@ import Questions from "../../components/questions/Questions";
 import RecentTopics from "../../components/recentTopics/RecentTopics";
 
 const Home = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   return (
-    <div className="home-container">
-      <SidebarLeft />
-      <Header />
-
-      <main className="pt-24 ml-64 pr-72 pb-24 h-[calc(110vh-5rem)] overflow-y-auto px-6">
-        <Highlights />
-        <Questions />
-      </main>
-
-      <RecentTopics />
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Layout com sidebar e conteúdo principal */}
+      <div className="flex flex-1">
+        <SidebarLeft />
+        
+        {/* Área principal */}
+        <div className="flex-1 flex flex-col">
+          <Header />
+          
+          {/* Conteúdo central com espaço para footer */}
+          <main className="flex-1 pt-24 ml-56 pr-72 pb-16 px-6 overflow-y-auto">
+            <Highlights />
+            <Questions />
+          </main>
+        </div>
+        
+        <RecentTopics />
+      </div>
+      
       <Footer />
     </div>
   );

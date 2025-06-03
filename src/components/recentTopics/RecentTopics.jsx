@@ -4,7 +4,7 @@ const RecentTopics = () => {
   const navigate = useNavigate();
 
   return (
-    <aside className="fixed right-5 top-60 w-60 h-[400px] bg-[#C3C3C3] shadow rounded-lg p-4 z-40">
+    <aside className="fixed right-5 top-24 w-60 h-[400px] bg-[#C3C3C3] shadow rounded-lg p-4 z-40">
       <h4 className="font-semibold text-gray-800">Tópicos recentes</h4>
       <ul className="py-6 space-y-2">
         {["java", "python", "c#"].map((tag, i) => (

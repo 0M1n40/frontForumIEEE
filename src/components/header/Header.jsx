@@ -4,7 +4,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className="fixed top-0 left-54 right-0 h-20 bg-white shadow px-6 py-4 flex items-center justify-between z-50">
+    <header className="fixed top-0 left-56 right-0 h-20 bg-white shadow px-6 py-4 flex items-center justify-between z-50">
       {/* Barra de pesquisa */}
       <input
         placeholder="Pesquisar..."
