@@ -1,7 +1,7 @@
 // src/layouts/MainLayout.jsx
 import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import MenuLateral from '../components/menuLateral/MenuLateral';
+import MenuLateral from '../components/menuLateral/menuLateral'
 import Header from '../components/header/Header'; // Seu Header atualizado precisará de um botão hamburger
 import Footer from '../components/footer/Footer';
 

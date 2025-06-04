@@ -1,37 +1,19 @@
-import { useAuth } from "../../contexts/AuthContext";
 
-import Header from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
+import CardDuvida from "../../components/duvidas/CardDuvida";
+import ListaDuvidas from "../../components/duvidas/ListaDuvida";
+import ModalConfirmacaoExcluir from "../../components/duvidas/ModalConfirmacaoExcluir";
+import ModalDuvidas from "../../components/duvidas/ModalDuvidas";
+import ModalNovaDuvida from "../../components/duvidas/ModalNovaDuvida";
 
-const defaultHome = () => {
+function Home() {
     return (
-        <div className="home">
-            <h1>Home Page</h1>
-            <p>Welcome to the home page!</p>
-        </div>
-    )
-}
-
-const loggedInHome = () => {
-    return (
-        <div className="home">
-            <h1>Welcome Back!</h1>
-            <p>You are logged in.</p>
-        </div>
-    )
-}
-
-const Home = () => {
-
-    const { user } = useAuth();
+        <>
+           
+                 <ListaDuvidas/>
+            
 
 
-    // return user ? defaultHome() : loggedInHome();
-    return (
-        <div className="home">
-            <h1>Home Page</h1>
-            <p>Welcome to the home page!</p>
-        </div>
+        </>
     )
 }
 
