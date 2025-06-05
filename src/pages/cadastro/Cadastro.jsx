@@ -10,15 +10,14 @@ import { toast } from 'react-toastify';
 
 function Cadastro() {
   const navigate = useNavigate();
-  // Renomeia isLoading para authIsLoading para evitar conflito com o isLoading local, se houver.
-  // Pega a função handleRegister do AuthContext.
-  const { user, handleRegister, isLoading: authIsLoading } = useAuth();
+const { user, handleRegister, isLoading: authIsLoading } = useAuth();
 
   // Estado local para o formulário
   const [form, setForm] = useState({
-    nome: "",     
+    name: "",     
     username: "",  
     password: "",  
+   
    
   });
 
@@ -58,6 +57,8 @@ function Cadastro() {
       // A função handleRegister já lida com a navegação e toasts globais
       await handleRegister(form);
       // Se chegou aqui sem erro, o AuthContext já redirecionou para /login
+      toast.success("Cadastro realizado com sucesso! Faça login para continuar.");
+      navigate("/login"); // Redireciona para a página de login após o cadastro
     } catch (error) {
       // O AuthContext já mostra um toast de erro genérico.
       // Você pode adicionar tratamentos específicos aqui se necessário.
@@ -108,11 +109,11 @@ function Cadastro() {
           <div className="flex flex-col w-full mb-4">
             <input
               type="text"
-              id="nome"
-              name="nome"
+              id="name"
+              name="name"
               placeholder="Nome completo"
               className="border-b border-gray-300 bg-transparent p-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-              value={form.nome}
+              value={form.name}
               onChange={atualizarEstado}
               required
             />

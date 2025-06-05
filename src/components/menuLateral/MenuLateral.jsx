@@ -4,10 +4,12 @@ import { Link, NavLink } from 'react-router-dom';
 import LogoAgora from '../../utils/img/LogoAgora.png'; // Verifique se o caminho está correto
 import { PlusCircleIcon, HomeIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
+
 const menuItems = [
   { name: 'Nova dúvida', href: '/nova-duvida', icon: PlusCircleIcon },
   { name: 'Início', href: '/home', icon: HomeIcon },
-  { name: 'Tópicos', href: '/topicos', icon: TagIcon },
+  { name: 'Categorias', href: '/categorias', icon: TagIcon },
+  
 ];
 
 // Adicionamos props para controlar a visibilidade no mobile

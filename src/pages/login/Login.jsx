@@ -10,15 +10,14 @@ import { Oval } from 'react-loader-spinner';
 
 function Login() {
   const navigate = useNavigate();
-  // Pega user, handleLogin e isLoading (renomeado para authIsLoading) do AuthContext
+
   const { user, handleLogin, isLoading: authIsLoading } = useAuth();
 
   // Estado local para o formulário de login
   const [form, setForm] = useState({
-    username: "", // Campo para o e-mail (ou nome de usuário, dependendo da API)
-    password: "", // Campo para a senha
-    // 'role' não é geralmente enviado no login, o backend determina a role com base nas credenciais.
-    // Se precisar dele por algum motivo específico, mantenha. Caso contrário, pode ser removido.
+    username: "", 
+    password: "", 
+ 
   });
 
   // Estado local para o loading específico desta página/operação
@@ -41,13 +40,12 @@ function Login() {
 
   // Função para lidar com o envio do formulário de login
   async function realizarLogin(e) {
-    e.preventDefault(); // Previne o comportamento padrão de submissão
-    setIsSubmitting(true); // Ativa o loading local
+    e.preventDefault(); 
+    setIsSubmitting(true);
 
     try {
       // Chama a função handleLogin do AuthContext com os dados do formulário.
       // O `handleLogin` espera um objeto com `username` e `password`.
-      // Se sua API espera 'email' em vez de 'username', você precisará ajustar
       // o objeto enviado ou o estado 'form'. Por ora, mantendo `username`.
       await handleLogin({
           username: form.username,
@@ -55,15 +53,14 @@ function Login() {
       });
       // Se chegou aqui sem erro, o AuthContext já redirecionou para /home
     } catch (error) {
-      // O AuthContext já mostra um toast de erro.
-      // Tratamentos específicos podem ser adicionados aqui se necessário.
+      // Se chegou aqui, fudeu
       console.error("Falha ao realizar login (componente):", error);
     } finally {
       setIsSubmitting(false); // Desativa o loading local
     }
   }
 
-  // Exibe o loading animado se o AuthContext estiver carregando ou se o formulário estiver sendo submetido.
+  
   if (authIsLoading || isSubmitting) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -101,7 +98,7 @@ function Login() {
           {/* Campo de e-mail/usuário */}
           <div className="flex flex-col w-full mb-6 text-base sm:text-lg">
             <input
-              type="email" // Recomendado usar 'email' se for um email
+              type="text" 
               id="username"
               name="username"
               placeholder="Usuário (e-mail)"

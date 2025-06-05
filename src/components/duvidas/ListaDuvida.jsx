@@ -21,9 +21,19 @@ function ListaDuvidas() {
 
     setIsLoading(true);
     try {
-      await buscar('/duvidas', setDuvidas, {
-        headers: { Authorization: token },
-      });
+     await buscar('/duvidas', (resposta) => {
+  if (Array.isArray(resposta.questions)) {
+    setDuvidas(resposta.questions);
+  } else if (Array.isArray(resposta?.content)) {
+    setDuvidas(resposta.content);
+  } else {
+    console.error('Formato inesperado de resposta:', resposta);
+    setDuvidas([]);
+  }
+}, {
+  headers: { Authorization: token },
+});
+      console.log("Dúvidas carregadas:", duvidas);
     } catch (error) {
       if (error.toString().includes('401') || error.toString().includes('403')) {
         alert('Sessão expirada. Faça login novamente.');

@@ -12,7 +12,7 @@ function Header({ onToggleMobileMenu }) {
 
   const onLogout = () => {
     handleLogout();
-    // navigate('/login'); // Avalie a necessidade desta linha
+     navigate('/'); // Avalie a necessidade desta linha
   };
 
   const handleSearch = (e) => {
@@ -55,11 +55,11 @@ function Header({ onToggleMobileMenu }) {
           {user ? (
             <>
               <Link
-                to="/nova-duvida"
+                to="/nova-categoria"
                 className="hidden sm:flex items-center bg-[#0D334D] text-white px-3 sm:px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors text-xs sm:text-sm font-medium"
               >
                 <PlusIcon className="h-5 w-5 mr-0 sm:mr-1.5" />
-                <span className="hidden sm:inline">Nova Dúvida</span> {/* Texto oculto em telas muito pequenas */}
+                <span className="hidden sm:inline">Nova Categoria</span> {/* Texto oculto em telas muito pequenas */}
               </Link>
               <Link
                 to="/perfil"
@@ -67,7 +67,7 @@ function Header({ onToggleMobileMenu }) {
                 title="Perfil"
               >
                 <UserCircleIcon className="h-7 w-7" />
-                <span className="ml-2 text-sm font-medium hidden sm:block">{user.nome || 'Meu Perfil'}</span>
+                <span className="ml-2 text-sm font-medium hidden sm:block">{user.name || 'Meu Perfil'}</span>
               </Link>
               <button
                 onClick={onLogout}

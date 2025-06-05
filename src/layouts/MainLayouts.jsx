@@ -1,12 +1,11 @@
-// src/layouts/MainLayout.jsx
+// src/layouts/MainLayout.jsx (versão simplificada)
 import React, { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import MenuLateral from '../components/menuLateral/menuLateral'
-import Header from '../components/header/Header'; // Seu Header atualizado precisará de um botão hamburger
+import { Outlet } from 'react-router-dom';
+import MenuLateral from '../components/menuLateral/MenuLateral';
+import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 
 function MainLayout() {
-  const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -17,20 +16,18 @@ function MainLayout() {
     setIsMobileMenuOpen(false);
   };
 
-  const hideFooterRoutes = ['/login', 'cadastrar'];
-  const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
-
   return (
     <>
       <MenuLateral isMobileOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
-      {/* Passa a função toggleMobileMenu para o Header */}
-      <Header onToggleMobileMenu={toggleMobileMenu} /> 
-      
+      <Header onToggleMobileMenu={toggleMobileMenu} />
+
       <div className={`flex flex-col min-h-screen pt-20 transition-all duration-300 ease-in-out md:pl-64`}>
         <main className="flex-grow p-6">
           <Outlet />
         </main>
-        {!shouldHideFooter && <Footer />}
+        {/* O Footer agora é renderizado incondicionalmente, pois este layout 
+            só aparece em páginas que devem tê-lo. */}
+        <Footer />
       </div>
     </>
   );
