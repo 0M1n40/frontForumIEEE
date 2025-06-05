@@ -4,7 +4,7 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import SidebarLeft from "../../components/sidebarLeft/SidebarLeft";
 import Highlights from "../../components/highlights/Highlights";
-import Questions from "../../components/questions/Questions";
+import Questions from "../../components/duvida/Questions";
 import RecentTopics from "../../components/recentTopics/RecentTopics";
 
 const Home = () => {

@@ -7,7 +7,7 @@ import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 import Unauthorized from './pages/Unauthorized'
-import NovaDuvida from "./pages/duvida/nova-duvida"
+import NovaDuvida from "./components/duvida/nova-duvida"
 
 import { AuthProvider } from './contexts/AuthContext'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
