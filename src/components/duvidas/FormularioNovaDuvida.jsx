@@ -66,40 +66,44 @@ function FormularioNovaDuvida() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setValidationError('');
-        setApiError('');
+    e.preventDefault();
+    setIsLoading(true);
+    setValidationError('');
+    setApiError('');
 
-        if (!formData.titulo.trim() || !formData.categoriaId || !formData.descricao.trim()) {
-            setValidationError('Todos os campos são obrigatórios.');
-            setIsLoading(false);
-            return;
-        }
+    if (!formData.titulo.trim() || !formData.categoriaId || !formData.descricao.trim()) {
+        toast.error('Todos os campos são obrigatórios.');
+        setIsLoading(false);
+        return;
+    }
 
-        const payloadParaBackend = {
-            title: formData.titulo,
-            content: formData.descricao,
-            categoryId: parseInt(formData.categoriaId),
-        };
-console.log("Enviando para o backend:", payloadParaBackend);
-        try {
-            if (id) { // Modo Edição
-                await atualizar(`/duvidas/${id}`, payloadParaBackend);
-                toast.success('Dúvida atualizada com sucesso!');
-            } else { // Modo Cadastro
-                await cadastrar('/duvidas', payloadParaBackend);
-                toast.success('Dúvida cadastrada com sucesso!');
-            }
-            navigate('/duvidas'); // Redireciona para a lista de dúvidas
-        } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Erro ao salvar a dúvida.';
-            setApiError(errorMsg); // Mostra o erro da API abaixo do formulário
-            toast.error(errorMsg);
-        } finally {
-            setIsLoading(false);
-        }
+    // Objeto para enviar ao backend com a correção aplicada
+    const payloadParaBackend = {
+        title: formData.titulo,
+        content: formData.descricao,
+        categoryId: formData.categoriaId, // Sem o parseInt()
     };
+
+    console.log("Enviando para o backend:", payloadParaBackend);
+
+    try {
+        if (id) { // Modo Edição
+            await atualizar(`/duvidas/${id}`, payloadParaBackend);
+            toast.success('Dúvida atualizada com sucesso!');
+        } else { // Modo Cadastro
+            await cadastrar('/duvidas', payloadParaBackend);
+            toast.success('Dúvida cadastrada com sucesso!');
+        }
+        navigate('/duvidas'); // Redireciona para a lista de dúvidas
+    } catch (error) {
+        const errorMsg = error.response?.data?.message || 'Erro ao salvar a dúvida.';
+        console.error("Erro ao salvar dúvida:", error);
+        setApiError(errorMsg);
+        toast.error(errorMsg);
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     // --- RENDERIZAÇÃO DO COMPONENTE ---
 

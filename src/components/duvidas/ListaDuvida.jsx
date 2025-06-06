@@ -5,6 +5,7 @@ import CardDuvida from '../duvidas/CardDuvida'; // Ajuste para o seu CardDuvida
 import ModalNovaDuvida from '../duvidas/ModalNovaDuvida'; // Ajuste para o seu ModalNovaDuvida
 import { useAuth } from '../../contexts/AuthContext';
 import { buscar } from '../../services/Service';
+import { toast } from 'react-toastify';
 
 function ListaDuvidas() {
   const navigate = useNavigate();
@@ -18,45 +19,28 @@ function ListaDuvidas() {
   // Usamos useCallback para memoizar buscarDuvidasCallback e evitar re-renders desnecessários
   // ou loops em useEffect se ela for passada como dependência.
   const buscarDuvidasCallback = useCallback(async () => {
+    // A verificação de 'isAuthenticated' já pode estar no seu useEffect, 
+    // mas uma checagem extra aqui é uma boa segurança.
     if (!isAuthenticated) return;
-    // achei o erro, pois o token nao existe
-
-    // sim, só trocar token por isAuthenticated,
-
-    // Vou dar push e aí vc faz pull pra pegar as mudanças
-    function callback(resposta){
-      console.log(resposta)
-      if (Array.isArray(resposta.questions)) {
-        setDuvidas(resposta.questions);
-      } else if (Array.isArray(resposta?.content)) {
-        setDuvidas(resposta.content);
-      } else {
-        console.error('Formato inesperado de resposta:', resposta);
-        setDuvidas([]);
-      }
-        
-    }
 
     setIsLoading(true);
     try {
-      await buscar('http://localhost:3000/api/duvidas', (resposta) => callback(resposta), {
-          headers: { Authorization: token },
-        });
+        // A chamada agora é super simples. A função 'buscar' do Service
+        // receberá o array do backend e o passará diretamente para 'setDuvidas'.
+        await buscar('/duvidas', setDuvidas);
+        console.log("funcionou sapora", duvidas);
 
-      
-      console.log("Dúvidas carregadas:", duvidas);
     } catch (error) {
-      if (error.toString().includes('401') || error.toString().includes('403')) {
-        alert('Sessão expirada. Faça login novamente.');
-        handleLogout();
-      } else {
-        alert('Erro ao carregar as dúvidas.');
+        
+      toast.error("Erro ao carregar o feed de dúvidas.");
         console.error("Erro ao buscar dúvidas:", error);
-      }
+        if (error.response?.status === 403) {
+            handleLogout();
+        }
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  }, [token, handleLogout]); // setDuvidas e setIsLoading são estáveis
+}, [isAuthenticated, handleLogout]); // Dependências corretas // setDuvidas e setIsLoading são estáveis
 
 // Em ListaDuvidas.jsx
 useEffect(() => {
@@ -105,7 +89,6 @@ useEffect(() => {
             .sort((a, b) => new Date(b.dataPostagem) - new Date(a.dataPostagem))
             .map((duvida) => (
               <div>
-                <button>duvida1</button>
                 
                 <CardDuvida
                 key={duvida.id}

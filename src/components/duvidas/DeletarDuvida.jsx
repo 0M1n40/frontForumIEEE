@@ -4,11 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { buscar, deletar } from '../../services/Service';
 import { RotatingLines } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 
 function DeletarDuvida() {
   const navigate = useNavigate();
   const { id } = useParams(); // ID da dúvida a ser deletada
-  const { user, handleLogout } = useAuth();
+  const { user, isAuthenticated, handleLogout } = useAuth();
   const token = user?.token;
 
   const [isLoading, setIsLoading] = useState(false); // Loading para a ação de deletar
@@ -30,20 +31,20 @@ function DeletarDuvida() {
     } finally {
       setIsDataLoading(false);
     }
-  }, [token, handleLogout]);
+  }, [ isAuthenticated, handleLogout]);
 
   useEffect(() => {
-    if (!token) {
+    if (!isAuthenticated) {
       alert('Você precisa estar logado.');
       navigate('/login');
     }
-  }, [token, navigate]);
+  }, [ isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (id && token) {
+    if (id &&  isAuthenticated) {
       buscarDuvidaPorId(id);
     }
-  }, [id, token, buscarDuvidaPorId]);
+  }, [id,  isAuthenticated, buscarDuvidaPorId]);
 
   const handleConfirmarDelecao = async () => {
     setIsLoading(true);
@@ -52,7 +53,7 @@ function DeletarDuvida() {
       await deletar(`/duvidas/${id}`, {
         headers: { Authorization: token },
       });
-      alert('Dúvida deletada com sucesso!');
+      toast.success('Dúvida deletada com sucesso!');
       navigate('/home'); // Ou para a lista de dúvidas
     } catch (err) {
       console.error("Erro ao deletar dúvida:", err);
@@ -105,7 +106,7 @@ function DeletarDuvida() {
           <button
             onClick={handleConfirmarDelecao}
             disabled={isLoading}
-            className="w-full sm:w-auto px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center min-w-[120px] focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-70"
+            className="w-full sm:w-auto px-6 py-2.5 bg-[#2C3E50] text-white rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center min-w-[120px] focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-70"
           >
             {isLoading ? (
               <RotatingLines strokeColor="white" width="24" />

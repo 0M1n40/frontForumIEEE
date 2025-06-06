@@ -17,6 +17,7 @@ import FormCategoria from './components/categorias/FormCategorias';
 import ListaDuvidas from './components/duvidas/ListaDuvida';
 import FormularioNovaDuvida from './components/duvidas/FormularioNovaDuvida';
 import NotFound from './pages/NotFound';
+import DeletarDuvida from './components/duvidas/DeletarDuvida';
 
 function App() {
   return (
@@ -48,6 +49,9 @@ function App() {
               <Route path="/editarCategoria/:id" element={<FormCategoria />} /> 
               <Route path="/duvidas" element={<ListaDuvidas />} />
               <Route path="/nova-duvida" element={<FormularioNovaDuvida />} />
+              <Route path="/editarDuvida/:id" element={<FormularioNovaDuvida />} />
+              <Route path="/deletarduvida/:id" element={< DeletarDuvida/>} />
+
 
             </Route>
           </Route>
