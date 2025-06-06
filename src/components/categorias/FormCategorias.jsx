@@ -25,7 +25,7 @@ function FormCategoria() {
     async function buscarPorId(id) {
         try {
             // O interceptor do Axios já adiciona o token
-            await buscar(`/categorias/${id}`, setCategoria);
+            await buscar(`/categories/${id}`, setCategoria);
         } catch (error) {
             toast.error('Erro ao buscar a categoria.');
             if (error.response?.status === 403) handleLogout();
@@ -54,11 +54,11 @@ console.log("Dados da categoria a serem enviados:", categoriaParaEnviar);
         try {
             if (id !== undefined) {
                 // Chamada de ATUALIZAR simplificada - o interceptor adiciona o token
-                await atualizar(`/categorias/${id}`, categoriaParaEnviar, setCategoria);
+                await atualizar(`/categories/${id}`, categoriaParaEnviar, setCategoria);
                 toast.success('Categoria atualizada com sucesso!');
             } else {
                 // Chamada de CADASTRAR simplificada - o interceptor adiciona o token
-                await cadastrar('/categorias', categoriaParaEnviar, setCategoria);
+                await cadastrar('/categories', categoriaParaEnviar, setCategoria);
                 toast.success('Categoria cadastrada com sucesso!');
             }
             navigate("/categorias");

@@ -57,7 +57,7 @@ const { user, handleRegister, isLoading: authIsLoading } = useAuth();
       // A função handleRegister já lida com a navegação e toasts globais
       await handleRegister(form);
       // Se chegou aqui sem erro, o AuthContext já redirecionou para /login
-      toast.success("Cadastro realizado com sucesso! Faça login para continuar.");
+      
       navigate("/login"); // Redireciona para a página de login após o cadastro
     } catch (error) {
       // O AuthContext já mostra um toast de erro genérico.
