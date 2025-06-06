@@ -23,6 +23,7 @@ function ListaDuvidas() {
     // mas uma checagem extra aqui é uma boa segurança.
     if (!isAuthenticated) return;
 
+
     setIsLoading(true);
     try {
         // A chamada agora é super simples. A função 'buscar' do Service
