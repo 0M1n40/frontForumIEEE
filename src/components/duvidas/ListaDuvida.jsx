@@ -19,11 +19,7 @@ function ListaDuvidas() {
   // ou loops em useEffect se ela for passada como dependência.
   const buscarDuvidasCallback = useCallback(async () => {
     if (!isAuthenticated) return;
-    // achei o erro, pois o token nao existe
-
-    // sim, só trocar token por isAuthenticated,
-
-    // Vou dar push e aí vc faz pull pra pegar as mudanças
+    
     function callback(resposta){
       console.log(resposta)
       if (Array.isArray(resposta.questions)) {
@@ -39,6 +35,7 @@ function ListaDuvidas() {
 
     setIsLoading(true);
     try {
+      
       await buscar('http://localhost:3000/api/duvidas', (resposta) => callback(resposta), {
           headers: { Authorization: token },
         });
