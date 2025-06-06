@@ -8,7 +8,8 @@ import { buscar } from '../../services/Service';
 
 function ListaDuvidas() {
   const navigate = useNavigate();
-  const { user, handleLogout } = useAuth();
+  const { isAuthenticated, user, handleLogout } = useAuth();
+  
   const token = user?.token;
 
   const [duvidas, setDuvidas] = useState([]);
@@ -17,22 +18,32 @@ function ListaDuvidas() {
   // Usamos useCallback para memoizar buscarDuvidasCallback e evitar re-renders desnecessários
   // ou loops em useEffect se ela for passada como dependência.
   const buscarDuvidasCallback = useCallback(async () => {
-    if (!token) return; // Não buscar se não houver token
+    if (!isAuthenticated) return;
+    // achei o erro, pois o token nao existe
+
+    // sim, só trocar token por isAuthenticated,
+
+    // Vou dar push e aí vc faz pull pra pegar as mudanças
+    function callback(resposta){
+      console.log(resposta)
+      if (Array.isArray(resposta.questions)) {
+        setDuvidas(resposta.questions);
+      } else if (Array.isArray(resposta?.content)) {
+        setDuvidas(resposta.content);
+      } else {
+        console.error('Formato inesperado de resposta:', resposta);
+        setDuvidas([]);
+      }
+        
+    }
 
     setIsLoading(true);
     try {
-     await buscar('/duvidas', (resposta) => {
-  if (Array.isArray(resposta.questions)) {
-    setDuvidas(resposta.questions);
-  } else if (Array.isArray(resposta?.content)) {
-    setDuvidas(resposta.content);
-  } else {
-    console.error('Formato inesperado de resposta:', resposta);
-    setDuvidas([]);
-  }
-}, {
-  headers: { Authorization: token },
-});
+      await buscar('http://localhost:3000/api/duvidas', (resposta) => callback(resposta), {
+          headers: { Authorization: token },
+        });
+
+      
       console.log("Dúvidas carregadas:", duvidas);
     } catch (error) {
       if (error.toString().includes('401') || error.toString().includes('403')) {
@@ -49,7 +60,8 @@ function ListaDuvidas() {
 
 // Em ListaDuvidas.jsx
 useEffect(() => {
-  if (token) { // Só busca se houver token
+  if (isAuthenticated) { // Só busca se houver token
+    // alert('buscando duvida')
     buscarDuvidasCallback();
   } else if(!user && window.location.pathname !== '/login' && window.location.pathname !== '/cadastrar') {
       // alert('Você precisa estar logado para ver as dúvidas.'); // Já tratado no AuthContext talvez
@@ -69,7 +81,7 @@ useEffect(() => {
   // ... (handleCurtirDuvidaNaLista, etc., se você os mantiver)
 
   if (isLoading && duvidas.length === 0) { // Mostra loading inicial mais precisamente
-    return (
+    (
       <div className="flex justify-center items-center min-h-[60vh]">
        
       </div>
@@ -85,18 +97,22 @@ useEffect(() => {
         </div>
       )}
 
-      {duvidas.length === 0 && !isLoading ? (
+      {duvidas.length === 0 ? (
         <p className="text-center text-gray-500 text-xl my-10">Nenhuma dúvida postada ainda.</p>
       ) : (
         <div className="max-w-3xl mx-auto space-y-6">
           {duvidas
             .sort((a, b) => new Date(b.dataPostagem) - new Date(a.dataPostagem))
             .map((duvida) => (
-            <CardDuvida 
-              key={duvida.id} 
-              duvida={duvida} 
-              // onCurtirDuvida={handleCurtirDuvidaNaLista} // Se mantiver a lógica de curtidas na lista
-            />
+              <div>
+                <button>duvida1</button>
+                
+                <CardDuvida
+                key={duvida.id}
+                duvida={duvida}
+                // onCurtirDuvida={handleCurtirDuvidaNaLista} // Se mantiver a lógica de curtidas na lista
+                            />
+              </div>
           ))}
         </div>
       )}

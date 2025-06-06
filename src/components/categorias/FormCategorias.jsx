@@ -20,6 +20,7 @@ function FormCategoria() {
             toast.info('Você precisa estar logado para acessar esta funcionalidade.');
             navigate('/login');
         }
+        
     }, [isAuthLoading, isAuthenticated, navigate]);
 
     async function buscarPorId(id) {
