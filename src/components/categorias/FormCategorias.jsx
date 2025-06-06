@@ -14,6 +14,7 @@ function FormCategoria() {
   const [isLoading, setIsLoading] = useState(false);
   const [categoria, setCategoria] = useState({ description: "" });
 
+
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
       toast.info("Você precisa estar logado para acessar esta funcionalidade.");

@@ -21,6 +21,7 @@ import DeletarDuvida from "./components/duvidas/DeletarDuvida";
 import Perfil from "./pages/perfil/Perfil";
 import PaginaPesquisa from "./pages/pesquisa/PaginaPesquisa";
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -43,6 +44,7 @@ function App() {
               <Route path="/nova-categoria" element={<FormCategoria />} />
               <Route path="/editarCategoria/:id" element={<FormCategoria />} />
               <Route path="/duvidas" element={<ListaDuvidas />} />
+              <Route path='/duvidas/:questionId' element={ <DetalhesDuvida /> } />
               <Route path="/nova-duvida" element={<FormularioNovaDuvida />} />
               <Route
                 path="/editarDuvida/:id"

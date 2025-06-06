@@ -46,6 +46,8 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
     respostasCount = 0,
   } = duvida;
 
+  
+
   // Verifica se o usuário logado é o dono da dúvida
   const isOwner = user && user.id === usuarioId;
 
