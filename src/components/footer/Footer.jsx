@@ -1,10 +1,9 @@
-
 const Footer = () => {
   return (
-    <header className="bg-gray-800 text-white p-4">
-      <h1 className="text-2xl">Créditos à Equipe Wolf-Byte</h1>
-    </header>
+    <footer className="w-full bg-gray-800 text-white py-4 px-6 shadow z-50">
+      <p className="text-center text-sm">Créditos à Equipe Wolf-Byte</p>
+    </footer>
   );
-}
+};
 
 export default Footer;

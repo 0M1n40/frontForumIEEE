@@ -20,8 +20,8 @@ function Cadastro() {
   });
 
   useEffect(() => {
-    if (user) {
-      navigate("/home");
+    if (!user) { // depois tirar o !
+      navigate("/");
     }
   }, [user, navigate]);
 
