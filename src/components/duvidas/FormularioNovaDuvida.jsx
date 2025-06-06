@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { buscar, cadastrar, atualizar } from '../../services/Service';
@@ -6,13 +6,11 @@ import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
 function FormularioNovaDuvida() {
-    // --- HOOKS E ESTADOS ---
     const navigate = useNavigate();
     const { id } = useParams(); // Pega o ID da URL para o modo de edição
 
-    const { user, isAuthenticated, isLoading: isAuthLoading, handleLogout } = useAuth();
+    const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
-    // Estados de controle do formulário
     const [isLoading, setIsLoading] = useState(false);
     const [apiError, setApiError] = useState('');
     const [validationError, setValidationError] = useState('');
@@ -27,9 +25,9 @@ function FormularioNovaDuvida() {
     const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
     const [isLoadingCategorias, setIsLoadingCategorias] = useState(false);
 
-    // --- LÓGICA DE AUTENTICAÇÃO E BUSCA DE DADOS ---
 
-    // Efeito para verificar se o usuário está logado
+
+
     useEffect(() => {
         if (!isAuthLoading && !isAuthenticated) {
             toast.info('Você precisa estar logado para acessar esta funcionalidade.');
@@ -55,9 +53,9 @@ function FormularioNovaDuvida() {
         }
     }, [isAuthenticated]);
 
-  
 
-    // --- FUNÇÕES DE MANIPULAÇÃO DO FORMULÁRIO ---
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -72,43 +70,47 @@ function FormularioNovaDuvida() {
         setApiError('');
 
         if (!formData.titulo.trim() || !formData.categoriaId || !formData.descricao.trim()) {
-            setValidationError('Todos os campos são obrigatórios.');
+            toast.error('Todos os campos são obrigatórios.');
             setIsLoading(false);
             return;
         }
 
+        // Objeto para enviar ao backend com a correção aplicada
         const payloadParaBackend = {
             title: formData.titulo,
             content: formData.descricao,
-            categoryId: parseInt(formData.categoriaId),
+            categoryId: formData.categoriaId,
         };
-console.log("Enviando para o backend:", payloadParaBackend);
+
+        console.log("Enviando para o backend:", payloadParaBackend);
+
         try {
-            if (id) { // Modo Edição
+            if (id) {
                 await atualizar(`/duvidas/${id}`, payloadParaBackend);
                 toast.success('Dúvida atualizada com sucesso!');
-            } else { // Modo Cadastro
+            } else {
                 await cadastrar('/duvidas', payloadParaBackend);
                 toast.success('Dúvida cadastrada com sucesso!');
             }
             navigate('/duvidas'); // Redireciona para a lista de dúvidas
         } catch (error) {
             const errorMsg = error.response?.data?.message || 'Erro ao salvar a dúvida.';
-            setApiError(errorMsg); // Mostra o erro da API abaixo do formulário
+            console.error("Erro ao salvar dúvida:", error);
+            setApiError(errorMsg);
             toast.error(errorMsg);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // --- RENDERIZAÇÃO DO COMPONENTE ---
+
 
     if (isAuthLoading) {
         return <div className="flex justify-center items-center p-8"><RotatingLines /></div>;
     }
 
     return (
-        <div className="bg-white p-6 md:p-8 rounded-lg shadow-xl max-w-2xl mx-auto my-10">
+        <div className="bg-white p-2 rounded-lg shadow-xl max-w-2xl mx-auto mt-5">
             <h2 className="text-2xl md:text-3xl font-bold text-[#0D334D] mb-6 text-center">
                 {id ? 'Editar Dúvida' : 'Qual sua dúvida?'}
             </h2>
@@ -128,7 +130,7 @@ console.log("Enviando para o backend:", payloadParaBackend);
                     />
                     <p className="text-xs text-gray-500 text-right mt-1">{formData.titulo.length}/100</p>
                 </div>
-                
+
                 <div>
                     <label htmlFor="categoriaId" className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
                     <select

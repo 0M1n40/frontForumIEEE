@@ -1,17 +1,17 @@
-// src/components/duvidas/DeletarDuvida.jsx (ou src/pages/duvidas/DeletarDuvida.jsx)
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { buscar, deletar } from '../../services/Service';
 import { RotatingLines } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 
 function DeletarDuvida() {
   const navigate = useNavigate();
   const { id } = useParams(); // ID da dúvida a ser deletada
-  const { user, handleLogout } = useAuth();
+  const { user, isAuthenticated, handleLogout } = useAuth();
   const token = user?.token;
 
-  const [isLoading, setIsLoading] = useState(false); // Loading para a ação de deletar
+  const [isLoading, setIsLoading] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true); // Loading para buscar dados da dúvida
   const [duvida, setDuvida] = useState(null); // Armazena os dados da dúvida para exibição
   const [error, setError] = useState('');
@@ -30,20 +30,20 @@ function DeletarDuvida() {
     } finally {
       setIsDataLoading(false);
     }
-  }, [token, handleLogout]);
+  }, [isAuthenticated, handleLogout]);
 
   useEffect(() => {
-    if (!token) {
+    if (!isAuthenticated) {
       alert('Você precisa estar logado.');
       navigate('/login');
     }
-  }, [token, navigate]);
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (id && token) {
+    if (id && isAuthenticated) {
       buscarDuvidaPorId(id);
     }
-  }, [id, token, buscarDuvidaPorId]);
+  }, [id, isAuthenticated, buscarDuvidaPorId]);
 
   const handleConfirmarDelecao = async () => {
     setIsLoading(true);
@@ -52,8 +52,8 @@ function DeletarDuvida() {
       await deletar(`/duvidas/${id}`, {
         headers: { Authorization: token },
       });
-      alert('Dúvida deletada com sucesso!');
-      navigate('/home'); // Ou para a lista de dúvidas
+      toast.success('Dúvida deletada com sucesso!');
+      navigate('/home');
     } catch (err) {
       console.error("Erro ao deletar dúvida:", err);
       setError('Erro ao deletar a dúvida. Tente novamente.');
@@ -74,16 +74,15 @@ function DeletarDuvida() {
       </div>
     );
   }
-  
+
   if (error) {
-     return <div className="container mx-auto p-4 text-center text-red-500">{error}</div>;
+    return <div className="container mx-auto p-4 text-center text-red-500">{error}</div>;
   }
 
   if (!duvida) {
     return <div className="container mx-auto p-4 text-center">Dúvida não encontrada.</div>;
   }
 
-  // Adapte a UI para se assemelhar ao seu ModalConfirmacaoExcluir ou DeletarPostagem.tsx
   return (
     <div className="container mx-auto max-w-lg p-4 my-10">
       <div className="bg-white p-6 sm:p-8 rounded-lg shadow-xl">
@@ -93,7 +92,7 @@ function DeletarDuvida() {
           <strong className="text-lg block mt-2">"{duvida.titulo}"</strong>?
         </p>
         <p className="text-center text-sm text-red-500 mb-6">Esta ação não poderá ser desfeita.</p>
-        
+
         <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
           <button
             onClick={handleCancelar}
@@ -105,7 +104,7 @@ function DeletarDuvida() {
           <button
             onClick={handleConfirmarDelecao}
             disabled={isLoading}
-            className="w-full sm:w-auto px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center min-w-[120px] focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-70"
+            className="w-full sm:w-auto px-6 py-2.5 bg-[#2C3E50] text-white rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center min-w-[120px] focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-70"
           >
             {isLoading ? (
               <RotatingLines strokeColor="white" width="24" />

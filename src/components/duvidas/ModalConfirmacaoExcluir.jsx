@@ -1,11 +1,4 @@
-// src/components/postagens/modalPostagem/ModalConfirmacaoExcluir.jsx
 import React from 'react';
-
-// Props:
-// - isOpen: boolean, controla a visibilidade do modal
-// - onClose: função para fechar o modal (chamada ao clicar em "Cancelar" ou no X/backdrop)
-// - onConfirm: função para chamar quando a exclusão é confirmada
-// - itemName: string, nome do item a ser excluído (ex: "dúvida", "resposta")
 
 function ModalConfirmacaoExcluir({ isOpen, onClose, onConfirm, itemName = "item" }) {
   if (!isOpen) {
@@ -13,7 +6,7 @@ function ModalConfirmacaoExcluir({ isOpen, onClose, onConfirm, itemName = "item"
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[60] p-4"> {/* z-index alto */}
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[60] p-4">
       <div className="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md transform transition-all">
         <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 text-center">
           Deseja Excluir?

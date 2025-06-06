@@ -1,23 +1,19 @@
-// src/pages/login/Login.jsx
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import LogoAgora from "../../utils/img/LogoAgora.png";
-import BotaoPrincipal from "../../components/buttons/botaoEntrar/BotaoEntrar"; // Renomeado para BotaoEntrar para consistência
-import { Oval } from 'react-loader-spinner';
-// import { toast } from 'react-toastify';
+import BotaoPrincipal from "../../components/buttons/botaoEntrar/BotaoEntrar";
+import { Oval } from "react-loader-spinner";
 
 function Login() {
   const navigate = useNavigate();
 
   const { user, handleLogin, isLoading: authIsLoading } = useAuth();
 
-  // Estado local para o formulário de login
   const [form, setForm] = useState({
-    username: "", 
-    password: "", 
- 
+    username: "",
+    password: "",
   });
 
   // Estado local para o loading específico desta página/operação
@@ -40,16 +36,13 @@ function Login() {
 
   // Função para lidar com o envio do formulário de login
   async function realizarLogin(e) {
-    e.preventDefault(); 
+    e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Chama a função handleLogin do AuthContext com os dados do formulário.
-      // O `handleLogin` espera um objeto com `username` e `password`.
-      // o objeto enviado ou o estado 'form'. Por ora, mantendo `username`.
       await handleLogin({
-          username: form.username,
-          password: form.password
+        username: form.username,
+        password: form.password,
       });
       // Se chegou aqui sem erro, o AuthContext já redirecionou para /home
     } catch (error) {
@@ -60,7 +53,6 @@ function Login() {
     }
   }
 
-  
   if (authIsLoading || isSubmitting) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -84,7 +76,7 @@ function Login() {
         <div className="absolute w-[300px] flex justify-center mb-100">
           <img
             src={LogoAgora}
-            alt="Logo do projeto" // Atualize o alt text
+            alt="Logo Agora"
             className="max-w-[55%] md:max-w-[60%] h-auto lg:max-w-[50%] mb-[10%] mt-[-10%]"
           />
         </div>
@@ -93,12 +85,14 @@ function Login() {
           className="flex justify-center items-center flex-col w-11/12 max-w-[500px] min-h-[400px] p-10 gap-3 mt-10 bg-white rounded-xl"
           onSubmit={realizarLogin}
         >
-          <h6 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 mt-23 text-center opa">Login</h6>
+          <h6 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 mt-23 text-center opa">
+            Login
+          </h6>
 
           {/* Campo de e-mail/usuário */}
           <div className="flex flex-col w-full mb-6 text-base sm:text-lg">
             <input
-              type="text" 
+              type="text"
               id="username"
               name="username"
               placeholder="Usuário (e-mail)"
@@ -125,9 +119,16 @@ function Login() {
 
           {/* Botão de login */}
           {/* Desabilitar o botão durante a submissão */}
-          <BotaoPrincipal label={"Entrar"} type="submit" disabled={isSubmitting || authIsLoading} />
+          <BotaoPrincipal
+            label={"Entrar"}
+            type="submit"
+            disabled={isSubmitting || authIsLoading}
+          />
 
-          <Link to="/cadastrar" className="text-md hover:text-amber-700 cursor-pointer">
+          <Link
+            to="/cadastrar"
+            className="text-md hover:text-amber-700 cursor-pointer"
+          >
             Não tem uma conta? Cadastre-se
           </Link>
         </form>
