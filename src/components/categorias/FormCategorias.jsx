@@ -26,7 +26,7 @@ function FormCategoria() {
     async function buscarPorId(id) {
         try {
             // O interceptor do Axios já adiciona o token
-            await buscar(`/categories/${id}`, setCategoria);
+            await buscar(`/categorias/${id}`, setCategoria);
         } catch (error) {
             toast.error('Erro ao buscar a categoria.');
             if (error.response?.status === 403) handleLogout();
