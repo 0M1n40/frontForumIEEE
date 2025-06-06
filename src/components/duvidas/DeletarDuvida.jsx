@@ -1,4 +1,3 @@
-// src/components/duvidas/DeletarDuvida.jsx (ou src/pages/duvidas/DeletarDuvida.jsx)
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -12,7 +11,7 @@ function DeletarDuvida() {
   const { user, isAuthenticated, handleLogout } = useAuth();
   const token = user?.token;
 
-  const [isLoading, setIsLoading] = useState(false); // Loading para a ação de deletar
+  const [isLoading, setIsLoading] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true); // Loading para buscar dados da dúvida
   const [duvida, setDuvida] = useState(null); // Armazena os dados da dúvida para exibição
   const [error, setError] = useState('');
@@ -31,20 +30,20 @@ function DeletarDuvida() {
     } finally {
       setIsDataLoading(false);
     }
-  }, [ isAuthenticated, handleLogout]);
+  }, [isAuthenticated, handleLogout]);
 
   useEffect(() => {
     if (!isAuthenticated) {
       alert('Você precisa estar logado.');
       navigate('/login');
     }
-  }, [ isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (id &&  isAuthenticated) {
+    if (id && isAuthenticated) {
       buscarDuvidaPorId(id);
     }
-  }, [id,  isAuthenticated, buscarDuvidaPorId]);
+  }, [id, isAuthenticated, buscarDuvidaPorId]);
 
   const handleConfirmarDelecao = async () => {
     setIsLoading(true);
@@ -54,7 +53,7 @@ function DeletarDuvida() {
         headers: { Authorization: token },
       });
       toast.success('Dúvida deletada com sucesso!');
-      navigate('/home'); // Ou para a lista de dúvidas
+      navigate('/home');
     } catch (err) {
       console.error("Erro ao deletar dúvida:", err);
       setError('Erro ao deletar a dúvida. Tente novamente.');
@@ -75,16 +74,15 @@ function DeletarDuvida() {
       </div>
     );
   }
-  
+
   if (error) {
-     return <div className="container mx-auto p-4 text-center text-red-500">{error}</div>;
+    return <div className="container mx-auto p-4 text-center text-red-500">{error}</div>;
   }
 
   if (!duvida) {
     return <div className="container mx-auto p-4 text-center">Dúvida não encontrada.</div>;
   }
 
-  // Adapte a UI para se assemelhar ao seu ModalConfirmacaoExcluir ou DeletarPostagem.tsx
   return (
     <div className="container mx-auto max-w-lg p-4 my-10">
       <div className="bg-white p-6 sm:p-8 rounded-lg shadow-xl">
@@ -94,7 +92,7 @@ function DeletarDuvida() {
           <strong className="text-lg block mt-2">"{duvida.titulo}"</strong>?
         </p>
         <p className="text-center text-sm text-red-500 mb-6">Esta ação não poderá ser desfeita.</p>
-        
+
         <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
           <button
             onClick={handleCancelar}

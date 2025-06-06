@@ -9,10 +9,9 @@ const menuItems = [
   { name: 'Nova dúvida', href: '/nova-duvida', icon: PlusCircleIcon },
   { name: 'Início', href: '/home', icon: HomeIcon },
   { name: 'Categorias', href: '/categorias', icon: TagIcon },
-  
+
 ];
 
-// Adicionamos props para controlar a visibilidade no mobile
 function MenuLateral({ isMobileOpen, onClose }) {
   return (
     <>

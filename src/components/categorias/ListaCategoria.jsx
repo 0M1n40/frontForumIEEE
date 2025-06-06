@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { buscar, deletar } from '../../services/Service';
-import CardCategoria from './CardCategoria'; // Ajuste o caminho se necessário
+import CardCategoria from './CardCategoria'; 
 import { RotatingLines } from 'react-loader-spinner';
+import { MagnifyingGlassIcon, UserCircleIcon, PlusIcon, ArrowLeftOnRectangleIcon, Bars3Icon } from '@heroicons/react/24/outline';
 
 function ListaCategoria() {
     const navigate = useNavigate();
@@ -23,16 +24,16 @@ function ListaCategoria() {
     async function buscarCategorias() {
         setIsApiLoading(true);
         try {
-            // CORREÇÃO: Chamada simplificada e URL correta
+
             await buscar('/categories', setCategorias);
         } catch (error) {
-            // CORREÇÃO: Tratamento de erro melhorado
+
             const errorMessage = error.response?.data?.message || "Erro ao listar as categorias.";
             toast.error(errorMessage);
-            //ESTÁ DANDO ERRO PARA LISTAR CATEGORIA (precisa ser ajustado )
+
             console.error("Erro ao listar categorias:", error);
             if (error.response?.status === 403) {
-                handleLogout(); 
+                handleLogout();
             }
         } finally {
             setIsApiLoading(false);
@@ -67,11 +68,15 @@ function ListaCategoria() {
                 Categorias
             </h1>
             <div className="flex justify-center mb-8">
-                <Link to="/nova-categoria" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-                    Cadastrar Nova Categoria
+                <Link
+                    to="/nova-categoria"
+                    className=" sm:flex items-center bg-[#0D334D] text-white p-2 rounded-lg hover:bg-opacity-90 transition-colors  "
+                >
+                    <PlusIcon className="h-5 w-5 " />
+
                 </Link>
             </div>
-            
+
             {isApiLoading ? (
                 <div className="flex justify-center"><RotatingLines strokeColor="grey" strokeWidth="5" width="50" /></div>
             ) : categorias.length === 0 ? (
@@ -79,9 +84,9 @@ function ListaCategoria() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {categorias.map((categoria) => (
-                        <CardCategoria 
-                            key={categoria.id} 
-                            categoria={categoria} 
+                        <CardCategoria
+                            key={categoria.id}
+                            categoria={categoria}
                             onDelete={handleDelete}
                         />
                     ))}

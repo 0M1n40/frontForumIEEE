@@ -1,9 +1,8 @@
-// src/components/duvidas/CardDuvida.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext'; // Verifique o caminho
+import { useAuth } from '../../contexts/AuthContext';
 import { ChatBubbleOvalLeftEllipsisIcon, HandThumbUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-// import { HandThumbUpIcon as HandThumbUpSolidIcon } from '@heroicons/react/24/solid';
+
 
 const formatarData = (isoString) => {
   if (!isoString) return 'Data indisponível';
@@ -24,26 +23,6 @@ const UserCircleIcon = (props) => (
   </svg>
 );
 
-// Adicione a interface para o objeto duvida, se você estiver trabalhando com TypeScript no projeto
-// interface Duvida {
-//   id: string | number;
-//   usuarioId: string | number; // ID do usuário que postou a dúvida
-//   nomeUsuario?: string;
-//   avatarUsuario?: string;
-//   titulo: string;
-//   descricao: string;
-//   categoria?: string;
-//   dataPostagem: string;
-//   curtidas?: number;
-//   usuariosQueCurtiram?: Array<string | number>;
-//   respostasCount?: number;
-// }
-
-// interface CardDuvidaProps {
-//   duvida: Duvida;
-//   onCurtirDuvida?: (duvidaId: string | number, curtiu: boolean) => void;
-// }
-
 function CardDuvida({ duvida, onCurtirDuvida }) {
   const { user } = useAuth(); // Usuário logado
   const navigate = useNavigate();
@@ -56,9 +35,8 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
   // Desestruturação com valores padrão para segurança
   const {
     id,
-    usuarioId, // ID do usuário que postou a dúvida (autor)
-    nomeUsuario = 'Usuário Anônimo', // Nome do autor da dúvida
-    // avatarUsuario, // Se você tiver avatar específico da dúvida/autor
+    usuarioId,
+    nomeUsuario = 'Usuário Anônimo',
     titulo = 'Título indisponível',
     descricao = 'Descrição indisponível',
     categoria = 'Geral',
@@ -104,18 +82,16 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
 
   return (
     <div
-      className="border border-gray-300 bg-[#E0D9D1] rounded-lg shadow-md flex flex-col justify-between overflow-hidden mb-6 transition-shadow duration-300 hover:shadow-lg"
+      className="border border-gray-300 bg-[#E0D9D1] rounded-lg shadow-md flex flex-col justify-between overflow-hidden mb-6 transition-shadow duration-300 hover:shadow-2xl hover:scale-102 cursor-pointer"
     >
       <div>
         {/* Cabeçalho do Card: Autor da Dúvida e Categoria/Data */}
         <div className="flex w-full bg-[#0D334D] text-white py-3 px-4 items-center gap-3">
-          {/* {avatarUsuario ? (
-            <img src={avatarUsuario} className="h-10 w-10 rounded-full object-cover" alt={`Foto de ${nomeUsuario}`} />
-          ) : ( */}
+
           <UserCircleIcon className="h-10 w-10 rounded-full text-gray-300 flex-shrink-0" />
-          {/* )} */}
-          <div className="flex-grow min-w-0"> {/* Para truncamento de texto se necessário */}
-            {/* CORREÇÃO APLICADA AQUI: Usar nomeUsuario (autor da dúvida) */}
+
+          <div className="flex-grow min-w-0">
+
             <h3 className="text-md font-semibold truncate" title={nomeUsuario}>{nomeUsuario}</h3>
             <p className="text-xs text-gray-300 truncate" title={categoria}>#{categoria}</p>
           </div>
@@ -140,58 +116,60 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
               title="Curtir"
               className={`flex items-center focus:outline-none transition-colors ${localCurtido ? 'text-[#0D334D] font-semibold' : 'text-gray-500 hover:text-[#0D334D]'}`}
             >
-              <HandThumbUpIcon className={`h-5 w-5 mr-1 ${localCurtido ? 'fill-current' : ''}`} /> 
+              <HandThumbUpIcon className={`h-5 w-5 mr-1 ${localCurtido ? 'fill-current' : ''}`} />
               {localTotalCurtidas}
             </button>
             <Link to={`/duvidas/${id}#respostas`} className="flex items-center text-gray-500 hover:text-[#0D334D] transition-colors">
               <ChatBubbleOvalLeftEllipsisIcon className="h-5 w-5 mr-1" />
               {respostasCount}
             </Link>
+            {isOwner && (
+              <div className="flex gap-2">
+                <Link
+                  to={`/editarduvida/${id}`}
+                  className="w-1/2 text-sm text-orange-400 hover:text-orange-700 flex items-center justify-center py-2.5 transition-colors"
+                >
+                  <PencilIcon className="h-4 w-4 mr-1.5" /> Editar
+                </Link>
+                <Link
+                  to={`/deletarduvida/${id}`}
+                  className="w-1/2 text-sm text-red-600 hover:text-red-900 flex items-center justify-center py-2.5 "
+                >
+                  <TrashIcon className="h-4 w-4 mr-1.5" /> Deletar
+                </Link>
+              </div>
+            )}
+
           </div>
 
           {!isOwner && user && ( // Mostrar botão de responder se não for o dono E estiver logado
-             <button
-             onClick={(e) => {
-               e.stopPropagation();
-               navigate(`/duvidas/${id}#responder`); 
-             }}
-             className="bg-[#0D334D] text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-opacity-90 transition-colors"
-           >
-             Responder
-           </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/duvidas/${id}#responder`);
+              }}
+              className="bg-[#0D334D] text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-opacity-90 transition-colors"
+            >
+              Responder
+            </button>
           )}
-           {!user && ( // Mostrar botão para logar se não estiver logado
-             <button
-             onClick={(e) => {
-               e.stopPropagation();
-               navigate('/login'); 
-             }}
-             className="bg-gray-500 text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-gray-600 transition-colors"
-           >
-             Responder
-           </button>
-           )}
+          {!user && ( // Mostrar botão para logar se não estiver logado
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/login');
+              }}
+              className="bg-gray-500 text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-gray-600 transition-colors"
+            >
+              Responder
+            </button>
+          )}
 
         </div>
       </div>
-      
-      {/* Links de Edição/Deleção para o Dono */}
-      {isOwner && (
-        <div className="flex border-t border-gray-200 bg-gray-50"> {/* Fundo sutil para ações do dono */}
-          <Link
-            to={`/editarduvida/${id}`} // Certifique-se que esta rota existe
-            className="w-1/2 text-sm text-blue-700 hover:bg-blue-100 flex items-center justify-center py-2.5 transition-colors"
-          >
-            <PencilIcon className="h-4 w-4 mr-1.5" /> Editar
-          </Link>
-          <Link
-            to={`/deletarduvida/${id}`} // Certifique-se que esta rota existe
-            className="w-1/2 text-sm text-red-600 hover:bg-red-100 flex items-center justify-center py-2.5 border-l border-gray-200 transition-colors"
-          >
-            <TrashIcon className="h-4 w-4 mr-1.5" /> Deletar
-          </Link>
-        </div>
-      )}
+
+
+
     </div>
   );
 }
