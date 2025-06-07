@@ -31,7 +31,7 @@ function DetalhesDuvida() {
 
             if (initialReplies.length > 0) {
                 // a. Coleta todos os IDs de usuário únicos das respostas
-                const userIds = [...new Set(initialReplies.map(reply => reply.usuarioId))];
+                const userIds = [...new Set(initialReplies.map(reply => reply.userId))];
                 
                 // b. Faz UMA ÚNICA chamada à API para buscar todos os autores
                 const usersRes = await api.post('/users/batch',
@@ -41,7 +41,7 @@ function DetalhesDuvida() {
                 // c. Mapeia as respostas para incluir os dados do autor correspondente
                 finalReplies = initialReplies.map(reply => ({
                     ...reply,
-                    user: usersMap.get(reply.usuarioId) || { name: 'Usuário Desconhecido' }
+                    user: usersMap.get(reply.userId) || { name: 'Usuário Desconhecido' }
                 }));
             }
             
@@ -89,7 +89,11 @@ function DetalhesDuvida() {
                     <span>Postado em: {new Date(duvida.createdAt).toLocaleString('pt-BR')}</span>
                 </div>
             </div>
-            <RespostasContainer respostas={respostas} />
+            { respostas.length
+                
+                ? <RespostasContainer respostas={respostas} />
+                : <></>
+            }
         </div>
     );
 }

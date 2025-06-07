@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatBubbleOvalLeftEllipsisIcon, HandThumbUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import ModalNovaResposta from '../respostas/ModalNovaResposta';
+import CardResposta from '../respostas/CardResposta';
 
 
 const formatarData = (isoString) => {
@@ -23,7 +25,7 @@ const UserCircleIcon = (props) => (
   </svg>
 );
 
-function CardDuvida({ duvida, onCurtirDuvida }) {
+function CardDuvida({ duvida, onCurtirDuvida, respostas }) {
   const { user } = useAuth(); // Usuário logado
   const navigate = useNavigate();
 
@@ -79,6 +81,11 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
       onCurtirDuvida(id, novoStatusCurtida);
     }
   };
+
+  const handleResponder = e => {
+    e.stopPropagation()
+    navigate('/nova-resposta')
+  }
 
   return (
     <div
@@ -144,10 +151,7 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
 
           {!isOwner && user && ( // Mostrar botão de responder se não for o dono E estiver logado
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/duvidas/${id}#responder`);
-              }}
+              onClick={ handleResponder }
               className="bg-[#0D334D] text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-opacity-90 transition-colors"
             >
               Responder
@@ -166,6 +170,22 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
           )}
 
         </div>
+
+          {
+            respostas 
+              ? respostas.map(resposta => (
+                <CardResposta 
+                  key={resposta.id} 
+                  content={resposta.content} 
+                  createdAt={resposta.createdAt}
+                  user={resposta.user}
+                />
+            ))
+
+              : <></>  
+          }
+
+
       </div>
 
 

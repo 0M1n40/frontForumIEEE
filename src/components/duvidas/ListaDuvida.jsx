@@ -18,8 +18,43 @@ function ListaDuvidas() {
     const buscarDuvidas = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = (await api.get('/duvidas')).data
-            setDuvidas(response)
+            const duvidas = (await api.get('/duvidas')).data
+            
+            const duvidasDetalhadas = await Promise.all(
+                duvidas.map(async duvida =>{
+                    
+                    // console.log(duvida)
+                    const categoria = await (await api.get(`/categorias/${duvida.categoryId}`)).data
+                    const user = (await api.get(`/users/${duvida.userId}`)).data
+                    const curtidas = (await api.get(`/duvidas/curtidas/${duvida.id}`)).data
+                    const respostas = (await api.get(`/respostas/duvida/${duvida.id}`)).data
+
+                    const respostasDetalhadas = await Promise.all(
+                        respostas.map(async resposta => {
+                            const user = (await api.get(`/users/${resposta.userId}`)).data
+                            return {
+                                ...resposta,
+                                user
+                            }
+                        })
+                    )
+
+                    console.log(respostasDetalhadas)
+                    return {
+                        id: duvida.id,
+                        usuarioId: duvida.userId,
+                        nomeUsuario: user.name,
+                        titulo: duvida.title,
+                        descricao: duvida.content,
+                        categoria: categoria.description,
+                        dataPostagem: duvida.createdAt,
+                        curtidas: curtidas.likes,
+                        respostas: respostasDetalhadas
+                    }
+                })
+            )
+
+            setDuvidas(duvidasDetalhadas)
 
         } catch (error) {
             toast.error("Erro ao carregar o feed de dúvidas.");
@@ -64,13 +99,14 @@ function ListaDuvidas() {
                 <div className="max-w-3xl mx-auto space-y-6">
                     {duvidas
                         .sort((a, b) => new Date(b.dataPostagem) - new Date(a.dataPostagem))
-                        .map((duvida) => (
-                            //  A prop 'key' está aqui e a 'div' extra foi removida para um código mais limpo.
-                            <CardDuvida
-                                key={duvida.id}
-                                duvida={duvida}
-                            />
-                        ))}
+                        .map((duvida) =>(
+                                <CardDuvida
+                                    key={duvida.id}
+                                    duvida={duvida}
+                                    respostas={duvida.respostas}
+                                />
+                            )
+                        )}
                 </div>
             )}
         </div>

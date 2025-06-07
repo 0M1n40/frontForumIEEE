@@ -21,8 +21,8 @@ import DeletarDuvida from "./components/duvidas/DeletarDuvida";
 import Perfil from "./pages/perfil/Perfil";
 import PaginaPesquisa from "./pages/pesquisa/PaginaPesquisa";
 import DetalhesDuvida from "./components/duvidas/DetalhesDuvida";
- 
- 
+import Resposta from "./components/respostas/Resposta";
+
 function App() {
   return (
     <BrowserRouter>
@@ -54,6 +54,12 @@ function App() {
               <Route path="/deletarduvida/:id" element={<DeletarDuvida />} />
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/pesquisa" element={<PaginaPesquisa />} />
+              <Route 
+                path="/nova-resposta" 
+                element={ 
+                  <Resposta />
+                } 
+              />
             </Route>
           </Route>
  
