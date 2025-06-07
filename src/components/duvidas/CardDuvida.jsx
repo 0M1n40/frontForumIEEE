@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatBubbleOvalLeftEllipsisIcon, HandThumbUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import api from '../../api/axios';
+
 
 const formatarData = (isoString) => {
   if (!isoString) return 'Data indisponível';
@@ -44,10 +44,7 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
     curtidas = 0,
     usuariosQueCurtiram = [],
     respostasCount = 0,
-    
   } = duvida;
-
-  
 
   // Verifica se o usuário logado é o dono da dúvida
   const isOwner = user && user.id === usuarioId;
@@ -110,8 +107,6 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
         </div>
       </div>
 
-      
-
       {/* Ações no Card (Curtir, Responder) */}
       <div className="p-4 border-t border-gray-200"> {/* Borda mais suave */}
         <div className="flex justify-between items-center">
@@ -147,25 +142,24 @@ function CardDuvida({ duvida, onCurtirDuvida }) {
 
           </div>
 
-            {user ? (
-            !isOwner && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/duvidas/${id}#responder`);
-                }}
-                className="bg-[#0D334D] text-white px-3 py-1.5 rounded-full hover:bg-opacity-90 text-xs sm:text-sm"
-              >
-                Responder
-              </button>
-            )
-          ) : (
+          {!isOwner && user && ( // Mostrar botão de responder se não for o dono E estiver logado
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/duvidas/${id}#responder`);
+              }}
+              className="bg-[#0D334D] text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-opacity-90 transition-colors"
+            >
+              Responder
+            </button>
+          )}
+          {!user && ( // Mostrar botão para logar se não estiver logado
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 navigate('/login');
               }}
-              className="bg-gray-500 text-white px-3 py-1.5 rounded-full hover:bg-gray-600 text-xs sm:text-sm"
+              className="bg-gray-500 text-white text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-gray-600 transition-colors"
             >
               Responder
             </button>
