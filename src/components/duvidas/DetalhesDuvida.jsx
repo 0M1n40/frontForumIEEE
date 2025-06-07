@@ -15,7 +15,7 @@ function DetalhesDuvida() {
       try {
         // 1. Busca a dúvida
         const duvidaRes = (await api.get(`/duvidas/${duvidaId}`)).data
-        const question = duvidaRes.question;
+        const question = duvidaRes;
 
         if (!question) throw new Error("Dúvida não encontrada");
         
@@ -35,7 +35,7 @@ function DetalhesDuvida() {
         });
 
         // 5. Busca respostas da dúvida
-        const respostasRes = await (await api.get(`/respostas/duvida/${duvidaId}`)).data.replies
+        const respostasRes = await (await api.get(`/respostas/duvida/${duvidaId}`)).data
         
         const replies = []
         for(const resposta of respostasRes){

@@ -6,18 +6,21 @@ import { useAuth } from '../../contexts/AuthContext';
 import { buscar } from '../../services/Service';
 import { toast } from 'react-toastify';
 import { RotatingLines } from 'react-loader-spinner'; // Importe o spinner se não estiver lá
-
+import api from '../../api/axios';
+ 
 function ListaDuvidas() {
     const navigate = useNavigate();
     const { user } = useAuth();
-
+ 
     const [duvidas, setDuvidas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+ 
     const buscarDuvidas = useCallback(async () => {
         setIsLoading(true);
         try {
-            await buscar('/duvidas', setDuvidas);
+            const response = (await api.get('/duvidas')).data
+            setDuvidas(response)
+
         } catch (error) {
             toast.error("Erro ao carregar o feed de dúvidas.");
             console.error("Erro ao buscar dúvidas:", error);
@@ -25,19 +28,19 @@ function ListaDuvidas() {
             setIsLoading(false);
         }
     }, []); // O array de dependências vazio faz com que esta função seja criada apenas uma vez.
-
-
+ 
+ 
     useEffect(() => {
         buscarDuvidas();
     }, [buscarDuvidas]);
-
+ 
     // Função para o Modal chamar quando uma nova dúvida for criada, para atualizar a lista.
     const handleNovaDuvidaAdicionada = () => {
         toast.info("Atualizando a lista de dúvidas...");
         buscarDuvidas(); // Re-busca a lista de dúvidas
     };
-
-
+ 
+ 
     if (isLoading) {
         return (
             <div className="flex justify-center items-center min-h-[60vh]">
@@ -45,7 +48,7 @@ function ListaDuvidas() {
             </div>
         );
     }
-
+ 
     return (
         <div className="container mx-auto px-4 py-8">
             {/* O botão para criar uma nova dúvida só aparece se o 'user' existir */}
@@ -54,7 +57,7 @@ function ListaDuvidas() {
                     <ModalNovaDuvida onDuvidaSalvaComSucesso={handleNovaDuvidaAdicionada} />
                 </div>
             )}
-
+ 
             {duvidas.length === 0 ? (
                 <p className="text-center text-gray-500 text-xl my-10">Nenhuma dúvida postada ainda.</p>
             ) : (
@@ -73,5 +76,5 @@ function ListaDuvidas() {
         </div>
     );
 }
-
+ 
 export default ListaDuvidas;

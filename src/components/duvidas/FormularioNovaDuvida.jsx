@@ -27,7 +27,6 @@ function FormularioNovaDuvida() {
 
 
 
-
     useEffect(() => {
         if (!isAuthLoading && !isAuthenticated) {
             toast.info('Você precisa estar logado para acessar esta funcionalidade.');
@@ -41,7 +40,7 @@ function FormularioNovaDuvida() {
             const fetchCategorias = async () => {
                 setIsLoadingCategorias(true);
                 try {
-                    await buscar('/categories', setCategoriasDisponiveis);
+                    await buscar('/categorias', setCategoriasDisponiveis);
                 } catch (error) {
                     toast.error('Falha ao carregar as categorias.');
                     console.error("Erro ao buscar categorias:", error);

@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+ 
 // Layouts e Componentes de Rota
 import MainLayout from "./layouts/MainLayouts";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
-
+ 
 // Páginas
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
@@ -20,14 +20,15 @@ import NotFound from "./pages/NotFound";
 import DeletarDuvida from "./components/duvidas/DeletarDuvida";
 import Perfil from "./pages/perfil/Perfil";
 import PaginaPesquisa from "./pages/pesquisa/PaginaPesquisa";
-
-
+import DetalhesDuvida from "./components/duvidas/DetalhesDuvida";
+ 
+ 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <ToastContainer />
-
+ 
         <Routes>
           {/* ROTAS PÚBLICAS */}
           <Route element={<MainLayout />}>
@@ -35,7 +36,7 @@ function App() {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/cadastrar" element={<Cadastro />} />
-
+ 
           {/* GRUPO DE ROTAS PROTEGIDAS */}
           <Route element={<ProtectedRoute />}>
             <Route element={<MainLayout />}>
@@ -55,7 +56,7 @@ function App() {
               <Route path="/pesquisa" element={<PaginaPesquisa />} />
             </Route>
           </Route>
-
+ 
           {/* ROTA DE NOT FOUND (PÁGINA NÃO ENCONTRADA) */}
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -63,5 +64,5 @@ function App() {
     </BrowserRouter>
   );
 }
-
+ 
 export default App;
