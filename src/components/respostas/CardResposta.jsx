@@ -1,5 +1,3 @@
-
-
 const CardResposta = ({ id, content, user, createdAt}) => {
 
     return (
@@ -12,7 +10,6 @@ const CardResposta = ({ id, content, user, createdAt}) => {
         </li>
     )
 
-    // sim
 }
 
 export default CardResposta

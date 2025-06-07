@@ -1,82 +1,87 @@
-import React, { useEffect, useState } from 'react';
+// pages/DetalhesDuvida.jsx
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import RespostasContainer from '../respostas/RespostasContainer';
 
 function DetalhesDuvida() {
     const { questionId: duvidaId } = useParams();
-    const [duvida, setDuvida] = useState({});
+    const [duvida, setDuvida] = useState(null);
     const [respostas, setRespostas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState('');
 
-  useEffect(() => {
-    const fetchDadosCompletos = async () => {
-      try {
-        // 1. Busca a dúvida
-        const duvidaRes = (await api.get(`/duvidas/${duvidaId}`)).data
-        const question = duvidaRes.question;
+    const fetchDados = useCallback(async () => {
+        setLoading(true);
+        try {
+            // 1. BUSCA DE DADOS PRINCIPAIS EM PARALELO
+            // Fazemos as duas chamadas mais importantes ao mesmo tempo.
+            const [duvidaRes, respostasRes] = await Promise.all([
+                api.get(`/duvidas/${duvidaId}`),      // Já contém os dados do usuário e categoria do backend
+                api.get(`/respostas/duvida/${duvidaId}`) // Busca a lista de respostas separadamente
+            ]);
 
-        if (!question) throw new Error("Dúvida não encontrada");
-        
-        // 2. Busca o usuário da dúvida
-        const userRes = (await api.get(`/users/${question.userId}`)).data;
-        const user = userRes;
+            // 2. PROCESSA A DÚVIDA PRINCIPAL
+            const duvidaCompleta = duvidaRes.data;
+            if (!duvidaCompleta) throw new Error("Dúvida não encontrada.");
 
-        // 3. Busca a categoria da dúvida
-        const categoriaRes = (await api.get(`/categorias/${question.categoryId}`)).data
-        const categoria = categoriaRes
+            // 3. PROCESSA AS RESPOSTAS E BUSCA SEUS AUTORES EM LOTE
+            const initialReplies = respostasRes.data.replies || [];
+            let finalReplies = initialReplies; // Define um valor padrão
 
-        // 4. Atualiza o estado com tudo
-        setDuvida({
-          ...question,
-          user,
-          category: categoria.description,
-        });
+            if (initialReplies.length > 0) {
+                // a. Coleta todos os IDs de usuário únicos das respostas
+                const userIds = [...new Set(initialReplies.map(reply => reply.usuarioId))];
 
-        // 5. Busca respostas da dúvida
-        const respostasRes = await (await api.get(`/respostas/duvida/${duvidaId}`)).data.replies
-        
-        const replies = []
-        for(const resposta of respostasRes){
-            const userReply = (await api.get(`/users/${resposta.userId}`)).data
+                // b. Faz UMA ÚNICA chamada à API para buscar todos os autores
+                const usersRes = await api.post('/users/batch', { ids: userIds });
+                const usersMap = new Map(usersRes.data.map(user => [user.id, user]));
 
-            replies.push({
-                ...resposta,
-                user: userReply
-            })
+                // c. Mapeia as respostas para incluir os dados do autor correspondente
+                finalReplies = initialReplies.map(reply => ({
+                    ...reply,
+                    user: usersMap.get(reply.usuarioId) || { name: 'Usuário Desconhecido' }
+                }));
+            }
+            
+            // 4. ATUALIZA OS ESTADOS DE UMA SÓ VEZ
+            // Após toda a busca e processamento de dados, atualizamos o estado do componente.
+            setDuvida(duvidaCompleta);
+            setRespostas(finalReplies);
+
+        } catch (err) {
+            console.error("Erro ao carregar dados:", err);
+            setErro("Falha ao carregar os dados da dúvida.");
+        } finally {
+            setLoading(false);
         }
+    }, [duvidaId]);
 
-        setRespostas(replies)
+    useEffect(() => {
+        if (duvidaId) {
+            fetchDados();
+        }
+    }, [duvidaId, fetchDados]);
 
-      } catch (err) {
-        console.error("Erro ao carregar dados da dúvida:", err);
-        setErro('Erro ao carregar dados da dúvida');
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (loading) return <p className="text-center p-8">Carregando...</p>;
+    if (erro) return <p className="text-red-500 text-center p-8">{erro}</p>;
+    if (!duvida) return null; // Não renderiza nada se a dúvida não for encontrada
 
-    fetchDadosCompletos();
-  }, [duvidaId]);
-
-  if (loading) return <p>Carregando...</p>;
-  if (erro) return <p className="text-red-500">{erro}</p>;
-
-  return (
-    <div className="p-4 space-y-6">
-      <div className="border p-4 rounded bg-white shadow">
-        <h1 className="text-2xl font-bold mb-2">{duvida.title}</h1>
-        <h2 className="text-lg font-semibold mb-1">{duvida.user?.name}</h2>
-        <h3 className="text-md text-gray-600 mb-4">@{duvida.user?.username}</h3>
-        <p className="mb-4 text-gray-700">{duvida.content}</p>
-        <p className="text-sm text-gray-500">Categoria: {duvida.category}</p>
-        <p className="text-sm text-gray-500">Postado em: {new Date(duvida.createdAt).toLocaleString()}</p>
-      </div>
-
-      {/* Lista de Respostas */}
-      <RespostasContainer respostas={ respostas } />
-    </div>
-  );
+    return (
+        <div className="p-4 space-y-6 max-w-4xl mx-auto">
+            <div className="border p-4 rounded bg-white shadow-lg">
+                <h1 className="text-3xl font-bold mb-3">{duvida.titulo}</h1>
+                <div className="flex items-center mb-4">
+                    <h2 className="text-xl font-semibold text-gray-800">{duvida.nomeUsuario}</h2>
+                </div>
+                <p className="text-gray-700 mb-6 whitespace-pre-wrap text-lg">{duvida.descricao}</p>
+                <div className="flex justify-between items-center text-sm text-gray-500 border-t pt-3">
+                    <span>Categoria: <strong>{duvida.categoria}</strong></span>
+                    <span>Postado em: {new Date(duvida.dataPostagem).toLocaleString('pt-BR')}</span>
+                </div>
+            </div>
+            <RespostasContainer respostas={respostas} />
+        </div>
+    );
 }
 export default DetalhesDuvida;

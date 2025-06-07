@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import DeletarDuvida from "./components/duvidas/DeletarDuvida";
 import Perfil from "./pages/perfil/Perfil";
 import PaginaPesquisa from "./pages/pesquisa/PaginaPesquisa";
+import DetalhesDuvida from "./components/duvidas/DetalhesDuvida";
 
 
 function App() {
