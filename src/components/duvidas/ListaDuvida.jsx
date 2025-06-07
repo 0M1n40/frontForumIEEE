@@ -60,7 +60,7 @@ function ListaDuvidas() {
             ) : (
                 <div className="max-w-3xl mx-auto space-y-6">
                     {duvidas
-                        .sort((a, b) => new Date(b.dataPostagem) - new Date(a.dataPostagem))
+                        // .sort((a, b) => new Date(b.dataPostagem) - new Date(a.dataPostagem))
                         .map((duvida) => (
                             //  A prop 'key' está aqui e a 'div' extra foi removida para um código mais limpo.
                             <CardDuvida

@@ -18,6 +18,7 @@ import ListaDuvidas from "./components/duvidas/ListaDuvida";
 import FormularioNovaDuvida from "./components/duvidas/FormularioNovaDuvida";
 import NotFound from "./pages/NotFound";
 import DeletarDuvida from "./components/duvidas/DeletarDuvida";
+import DetalhesDuvida from "./components/duvidas/DetalhesDuvida";
 import Perfil from "./pages/perfil/Perfil";
 import PaginaPesquisa from "./pages/pesquisa/PaginaPesquisa";
 
