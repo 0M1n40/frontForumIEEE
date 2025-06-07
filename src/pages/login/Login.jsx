@@ -1,31 +1,32 @@
 import { useNavigate, Link } from "react-router-dom";
-import "./Login.css"; 
+import "./Login.css";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext"; 
-import LogoAgora from "../../utils/img/LogoAgora.png"; 
-import BotaoPrincipal from "../../components/buttons/botaoEntrar/BotaoEntrar"; 
-import { Oval } from 'react-loader-spinner'; 
+import { useAuth } from "../../contexts/AuthContext";
+import LogoAgora from "../../utils/img/LogoAgora.png";
+import BotaoPrincipal from "../../components/buttons/botaoEntrar/BotaoEntrar";
+import { Oval } from "react-loader-spinner";
 
 function Login() {
-  const navigate = useNavigate(); // Hook para redirecionar páginas
-  const [isLoading, setIsLoading] = useState(false); // Estado para loading
-  const { user, login } = useAuth(); // Pega dados do usuário e função de login
+  const navigate = useNavigate();
 
-  // Estado do formulário
+  const { user, handleLogin, isLoading: authIsLoading } = useAuth();
+
   const [form, setForm] = useState({
-    username: "", // campo de e-mail
-    password: "", // campo de senha
-    role: "user", // padrão como "user"; pode ser alterado depois se necessário
+    username: "",
+    password: "",
   });
 
-  // Se o usuário já estiver logado, redireciona para a home
+  // Estado local para o loading específico desta página/operação
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Efeito para redirecionar se o usuário já estiver logado
   useEffect(() => {
-    if (!user) { // depois tirar o !
+    if (user) {
       navigate("/home");
     }
   }, [user, navigate]);
 
-  // Atualiza os campos do formulário conforme o usuário digita
+  // Função para atualizar o estado do formulário
   function atualizarEstado(e) {
     setForm({
       ...form,
@@ -33,20 +34,26 @@ function Login() {
     });
   }
 
-  // Função executada ao enviar o formulário
+  // Função para lidar com o envio do formulário de login
   async function realizarLogin(e) {
-    e.preventDefault(); // Evita o reload da página
-    setIsLoading(true); // Exibe o loader
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      await login(form); // Chama o login com os dados preenchidos
+      await handleLogin({
+        username: form.username,
+        password: form.password,
+      });
+      // Se chegou aqui sem erro, o AuthContext já redirecionou para /home
+    } catch (error) {
+      // Se chegou aqui, fudeu
+      console.error("Falha ao realizar login (componente):", error);
     } finally {
-      setIsLoading(false); // Remove o loader
+      setIsSubmitting(false); // Desativa o loading local
     }
   }
 
-  // Exibe o loading animado enquanto o login está sendo processado
-  if (isLoading) {
+  if (authIsLoading || isSubmitting) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Oval
@@ -61,34 +68,31 @@ function Login() {
     );
   }
 
-  // Tela principal de login
   return (
     <div className="grid lg:grid-cols-7 h-screen fundoLogin overflow-auto">
-      {/* Coluna lateral esquerda (vazia no momento) */}
       <div className="relative h-full hidden lg:flex flex-col justify-between lg:col-span-2"></div>
 
-      {/* Área do formulário */}
       <div className="flex justify-center items-center flex-col w-full lg:col-span-3 gap-3 rounded-lg">
-        {/* Logo */}
         <div className="absolute w-[300px] flex justify-center mb-100">
           <img
             src={LogoAgora}
-            alt="Logo do projeto VaiComigo"
+            alt="Logo Agora"
             className="max-w-[55%] md:max-w-[60%] h-auto lg:max-w-[50%] mb-[10%] mt-[-10%]"
           />
         </div>
 
-        {/* Formulário de login */}
         <form
           className="flex justify-center items-center flex-col w-11/12 max-w-[500px] min-h-[400px] p-10 gap-3 mt-10 bg-white rounded-xl"
           onSubmit={realizarLogin}
         >
-          <h6 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 mt-23 text-center opa">Login</h6>
+          <h6 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 mt-23 text-center opa">
+            Login
+          </h6>
 
-          {/* Campo de e-mail */}
+          {/* Campo de e-mail/usuário */}
           <div className="flex flex-col w-full mb-6 text-base sm:text-lg">
             <input
-              type="email"
+              type="text"
               id="username"
               name="username"
               placeholder="Usuário (e-mail)"
@@ -113,22 +117,20 @@ function Login() {
             />
           </div>
 
-          {/* Campo para selecionar a role (opcional para testes futuros) */}
-          {/* 
-          <select name="role" value={form.role} onChange={atualizarEstado} className="border rounded px-3 py-2">
-            <option value="user">Usuário</option>
-            <option value="admin">Administrador</option>
-          </select>
-          */}
-
           {/* Botão de login */}
-          <BotaoPrincipal label={"Entrar"} />
+          {/* Desabilitar o botão durante a submissão */}
+          <BotaoPrincipal
+            label={"Entrar"}
+            type="submit"
+            disabled={isSubmitting || authIsLoading}
+          />
 
-          {/* Link para login ] */}
-          <Link to="/cadastrar" className="text-md hover:text-amber-700 cursor-pointer">
-          Não tem uma conta? Cadastre-se
-              </Link>
-
+          <Link
+            to="/cadastrar"
+            className="text-md hover:text-amber-700 cursor-pointer"
+          >
+            Não tem uma conta? Cadastre-se
+          </Link>
         </form>
       </div>
     </div>
