@@ -26,15 +26,16 @@ function DetalhesDuvida() {
             if (!duvidaCompleta) throw new Error("Dúvida não encontrada.");
 
             // 3. PROCESSA AS RESPOSTAS E BUSCA SEUS AUTORES EM LOTE
-            const initialReplies = respostasRes.data.replies || [];
+            const initialReplies = respostasRes.data || [];
             let finalReplies = initialReplies; // Define um valor padrão
 
             if (initialReplies.length > 0) {
                 // a. Coleta todos os IDs de usuário únicos das respostas
                 const userIds = [...new Set(initialReplies.map(reply => reply.usuarioId))];
-
+                
                 // b. Faz UMA ÚNICA chamada à API para buscar todos os autores
-                const usersRes = await api.post('/users/batch', { ids: userIds });
+                const usersRes = await api.post('/users/batch',
+                    { ids: userIds });
                 const usersMap = new Map(usersRes.data.map(user => [user.id, user]));
 
                 // c. Mapeia as respostas para incluir os dados do autor correspondente
@@ -46,7 +47,15 @@ function DetalhesDuvida() {
             
             // 4. ATUALIZA OS ESTADOS DE UMA SÓ VEZ
             // Após toda a busca e processamento de dados, atualizamos o estado do componente.
-            setDuvida(duvidaCompleta);
+
+            const user = (await api.get(`/users/${duvidaCompleta.userId}`)).data
+            const category = await (await api.get(`/categorias/${duvidaCompleta.categoryId}`)).data
+            
+            setDuvida({
+                ...duvidaCompleta,
+                user,
+                category
+            });
             setRespostas(finalReplies);
 
         } catch (err) {
@@ -72,12 +81,12 @@ function DetalhesDuvida() {
             <div className="border p-4 rounded bg-white shadow-lg">
                 <h1 className="text-3xl font-bold mb-3">{duvida.titulo}</h1>
                 <div className="flex items-center mb-4">
-                    <h2 className="text-xl font-semibold text-gray-800">{duvida.nomeUsuario}</h2>
+                    <h2 className="text-xl font-semibold text-gray-800">{duvida.user.name}</h2>
                 </div>
                 <p className="text-gray-700 mb-6 whitespace-pre-wrap text-lg">{duvida.descricao}</p>
                 <div className="flex justify-between items-center text-sm text-gray-500 border-t pt-3">
-                    <span>Categoria: <strong>{duvida.categoria}</strong></span>
-                    <span>Postado em: {new Date(duvida.dataPostagem).toLocaleString('pt-BR')}</span>
+                    <span>Categoria: <strong>{duvida.category.description}</strong></span>
+                    <span>Postado em: {new Date(duvida.createdAt).toLocaleString('pt-BR')}</span>
                 </div>
             </div>
             <RespostasContainer respostas={respostas} />
