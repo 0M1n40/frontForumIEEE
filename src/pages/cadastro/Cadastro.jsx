@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import LogoAgora from "../../utils/img/LogoAgora.png";
 import BotaoEntrar from "../../components/buttons/botaoEntrar/BotaoEntrar";
-import { Oval } from "react-loader-spinner";
+// import { Oval } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 function Cadastro() {
@@ -60,14 +60,14 @@ function Cadastro() {
   if (authIsLoading || isSubmitting) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Oval
+        {/* <Oval
           visible={true}
           height={120}
           width={120}
           color="#60A5FA"
           secondaryColor="#BFDBFE"
           ariaLabel="loading"
-        />
+        /> */}
       </div>
     );
   }

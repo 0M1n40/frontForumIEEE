@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { RotatingLines } from "react-loader-spinner";
+// import { RotatingLines } from "react-loader-spinner";
 
 const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -11,7 +11,7 @@ const ProtectedRoute = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <RotatingLines strokeColor="grey" strokeWidth="5" width="50" />
+        {/* <RotatingLines strokeColor="grey" strokeWidth="5" width="50" /> */}
       </div>
     );
   }

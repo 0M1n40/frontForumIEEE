@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { buscar, cadastrar, atualizar } from '../../services/Service';
-import { RotatingLines } from 'react-loader-spinner';
+// import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import api from '../../api/axios';
 
@@ -98,7 +98,7 @@ function FormularioNovaResposta() {
 
 
     if (isAuthLoading) {
-        return <div className="flex justify-center items-center p-8"><RotatingLines /></div>;
+        // return <div className="flex justify-center items-center p-8"><RotatingLines /></div>;
     }
 
     return (
@@ -141,7 +141,8 @@ function FormularioNovaResposta() {
                         className="w-full sm:w-auto px-6 py-2.5 bg-[#0D334D] text-white rounded-lg hover:bg-opacity-90 font-medium flex items-center justify-center min-w-[160px] disabled:opacity-70"
                     >
                         {isLoading ? (
-                            <RotatingLines strokeColor="white" strokeWidth="5" animationDuration="0.75" width="24" visible={true} />
+                            // <RotatingLines strokeColor="white" strokeWidth="5" animationDuration="0.75" width="24" visible={true} />
+                            <div></div>
                         ) : (id ? 'Salvar Alterações' : 'Enviar Dúvida')}
                     </button>
                 </div>

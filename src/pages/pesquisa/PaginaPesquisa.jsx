@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { buscar } from "../../services/Service";
 import CardDuvida from "../../components/duvidas/CardDuvida"; // Reutilize seu CardDuvida
-import { RotatingLines } from "react-loader-spinner";
+// import { RotatingLines } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 function PaginaPesquisa() {
@@ -31,7 +31,7 @@ function PaginaPesquisa() {
 
       {isLoading ? (
         <div className="flex justify-center mt-10">
-          <RotatingLines width="50" />
+          {/* <RotatingLines width="50" /> */}
         </div>
       ) : resultados.length === 0 ? (
         <p className="text-center text-gray-500 text-xl">

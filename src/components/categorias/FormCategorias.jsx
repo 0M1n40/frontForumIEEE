@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { RotatingLines } from "react-loader-spinner";
+// import { RotatingLines } from "react-loader-spinner";
 import { useAuth } from "../../contexts/AuthContext";
 import { atualizar, buscar, cadastrar } from "../../services/Service";
 import { toast } from "react-toastify";
@@ -95,7 +95,8 @@ function FormCategoria() {
           disabled={isLoading}
         >
           {isLoading ? (
-            <RotatingLines strokeColor="white" strokeWidth="5" width="24" />
+            // <RotatingLines strokeColor="white" strokeWidth="5" width="24" />
+            <span>Carregando...</span>
           ) : (
             <span>Confirmar</span>
           )}

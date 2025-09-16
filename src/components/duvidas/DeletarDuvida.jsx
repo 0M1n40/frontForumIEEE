@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { buscar, deletar } from '../../services/Service';
-import { RotatingLines } from 'react-loader-spinner';
+// import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
 function DeletarDuvida() {
@@ -70,7 +70,7 @@ function DeletarDuvida() {
   if (isDataLoading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
-        <RotatingLines strokeColor="#0D334D" width="80" />
+        {/* <RotatingLines strokeColor="#0D334D" width="80" /> */}
       </div>
     );
   }
@@ -107,7 +107,8 @@ function DeletarDuvida() {
             className="w-full sm:w-auto px-6 py-2.5 bg-[#2C3E50] text-white rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center min-w-[120px] focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-70"
           >
             {isLoading ? (
-              <RotatingLines strokeColor="white" width="24" />
+              // <RotatingLines strokeColor="white" width="24" />
+              'Deletando...'
             ) : (
               'Sim, Deletar'
             )}

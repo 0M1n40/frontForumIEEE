@@ -5,7 +5,7 @@ import ModalNovaDuvida from '../duvidas/ModalNovaDuvida';
 import { useAuth } from '../../contexts/AuthContext';
 import { buscar } from '../../services/Service';
 import { toast } from 'react-toastify';
-import { RotatingLines } from 'react-loader-spinner'; // Importe o spinner se não estiver lá
+// import { RotatingLines } from 'react-loader-spinner'; // Importe o spinner se não estiver lá
 import api from '../../api/axios';
  
 function ListaDuvidas() {
@@ -79,7 +79,7 @@ function ListaDuvidas() {
     if (isLoading) {
         return (
             <div className="flex justify-center items-center min-h-[60vh]">
-                <RotatingLines strokeColor="grey" strokeWidth="5" animationDuration="0.75" width="50" />
+                {/* <RotatingLines strokeColor="grey" strokeWidth="5" animationDuration="0.75" width="50" /> */}
             </div>
         );
     }

@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { buscar, deletar } from '../../services/Service';
 import CardCategoria from './CardCategoria'; 
-import { RotatingLines } from 'react-loader-spinner';
+// import { RotatingLines } from 'react-loader-spinner';
 import { MagnifyingGlassIcon, UserCircleIcon, PlusIcon, ArrowLeftOnRectangleIcon, Bars3Icon } from '@heroicons/react/24/outline';
 
 function ListaCategoria() {
@@ -78,7 +78,8 @@ function ListaCategoria() {
             </div>
 
             {isApiLoading ? (
-                <div className="flex justify-center"><RotatingLines strokeColor="grey" strokeWidth="5" width="50" /></div>
+                <p className="text-gray-500 text-center">Carregando categorias...</p>
+                // <div className="flex justify-center"><RotatingLines strokeColor="grey" strokeWidth="5" width="50" /></div>
             ) : categorias.length === 0 ? (
                 <p className="text-gray-500 text-center">Nenhuma categoria cadastrada.</p>
             ) : (
