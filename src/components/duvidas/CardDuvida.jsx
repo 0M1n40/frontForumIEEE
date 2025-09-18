@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ChatBubbleOvalLeftEllipsisIcon, HandThumbUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import ModalNovaResposta from '../respostas/ModalNovaResposta';
+import ModalNovaResposta from '../respostas/ModalNewReply';
 import CardResposta from '../respostas/CardResposta';
 
 
