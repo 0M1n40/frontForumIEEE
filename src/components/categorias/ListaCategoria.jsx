@@ -9,17 +9,17 @@ import { MagnifyingGlassIcon, UserCircleIcon, PlusIcon, ArrowLeftOnRectangleIcon
 
 function ListaCategoria() {
     const navigate = useNavigate();
-    const { isAuthenticated, isLoading, handleLogout } = useAuth();
+    const { isAuthenticated, isLoading, logout } = useAuth();
 
     const [categorias, setCategorias] = useState([]);
     const [isApiLoading, setIsApiLoading] = useState(false); // Loading específico para a API
 
-    useEffect(() => {
-        if (!isLoading && !isAuthenticated) {
-            toast.info('Você precisa estar logado para acessar esta página.');
-            navigate('/login');
-        }
-    }, [isLoading, isAuthenticated, navigate]);
+    // useEffect(() => {
+    //     if (!isLoading && !isAuthenticated) {
+    //         toast.info('Você precisa estar logado para acessar esta página.');
+    //         navigate('/login');
+    //     }
+    // }, [isLoading, isAuthenticated, navigate]);
 
     async function buscarCategorias() {
         setIsApiLoading(true);
@@ -33,7 +33,7 @@ function ListaCategoria() {
 
             console.error("Erro ao listar categorias:", error);
             if (error.response?.status === 403) {
-                handleLogout();
+                logout();
             }
         } finally {
             setIsApiLoading(false);

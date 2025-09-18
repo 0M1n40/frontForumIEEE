@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 function DeletarDuvida() {
   const navigate = useNavigate();
   const { id } = useParams(); // ID da dúvida a ser deletada
-  const { user, isAuthenticated, handleLogout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const token = user?.token;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -26,11 +26,11 @@ function DeletarDuvida() {
     } catch (err) {
       console.error("Erro ao buscar dúvida para deletar:", err);
       setError('Falha ao carregar os dados da dúvida.');
-      if (err.toString().includes('401') || err.toString().includes('403')) handleLogout();
+      if (err.toString().includes('401') || err.toString().includes('403')) logout();
     } finally {
       setIsDataLoading(false);
     }
-  }, [isAuthenticated, handleLogout]);
+  }, [isAuthenticated, logout]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -57,7 +57,7 @@ function DeletarDuvida() {
     } catch (err) {
       console.error("Erro ao deletar dúvida:", err);
       setError('Erro ao deletar a dúvida. Tente novamente.');
-      if (err.toString().includes('401') || err.toString().includes('403')) handleLogout();
+      if (err.toString().includes('401') || err.toString().includes('403')) logout();
     } finally {
       setIsLoading(false);
     }

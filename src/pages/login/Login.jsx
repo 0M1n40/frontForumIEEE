@@ -9,10 +9,10 @@ import BotaoPrincipal from "../../components/buttons/botaoEntrar/BotaoEntrar";
 function Login() {
   const navigate = useNavigate();
 
-  const { user, handleLogin, isLoading: authIsLoading } = useAuth();
+  const { user, login, isLoading: authIsLoading } = useAuth();
 
   const [form, setForm] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -22,7 +22,7 @@ function Login() {
   // Efeito para redirecionar se o usuário já estiver logado
   useEffect(() => {
     if (user) {
-      navigate("/home");
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -40,8 +40,8 @@ function Login() {
     setIsSubmitting(true);
 
     try {
-      await handleLogin({
-        username: form.username,
+      await login({
+        email: form.email,
         password: form.password,
       });
       // Se chegou aqui sem erro, o AuthContext já redirecionou para /home
@@ -93,11 +93,11 @@ function Login() {
           <div className="flex flex-col w-full mb-6 text-base sm:text-lg">
             <input
               type="text"
-              id="username"
-              name="username"
+              id="email"
+              name="email"
               placeholder="Usuário (e-mail)"
               className="border-b border-gray-300 bg-transparent p-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-              value={form.username}
+              value={form.email}
               onChange={atualizarEstado}
               required
             />

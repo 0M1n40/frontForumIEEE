@@ -9,11 +9,11 @@ import { toast } from "react-toastify";
 
 function Cadastro() {
   const navigate = useNavigate();
-  const { user, handleRegister, isLoading: authIsLoading } = useAuth();
+  const { user, register, loading: authIsLoading } = useAuth();
 
   const [form, setForm] = useState({
     name: "",
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -46,7 +46,7 @@ function Cadastro() {
     }
 
     try {
-      await handleRegister(form);
+      await register({ ...form, username: form.email });
       // console.log("Cadastro realizado com sucesso:", form);
       navigate("/login");
     } catch (error) {
@@ -111,11 +111,11 @@ function Cadastro() {
           <div className="flex flex-col w-full mb-4">
             <input
               type="email"
-              id="username"
-              name="username"
+              id="email"
+              name="email"
               placeholder="E-mail"
               className="border-b border-gray-300 bg-transparent p-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-500"
-              value={form.username}
+              value={form.email}
               onChange={atualizarEstado}
               required
             />

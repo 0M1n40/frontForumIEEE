@@ -10,12 +10,12 @@ import {
 } from "@heroicons/react/24/outline"; // Adicione Bars3Icon
 
 function Header({ onToggleMobileMenu }) {
-  const { user, handleLogout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   const onLogout = () => {
-    handleLogout();
+    logout();
   };
 
   const handleSearch = (e) => {
